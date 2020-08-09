@@ -76,6 +76,7 @@ func main() {
 	world.State = make(map[string]interface{})
 	world.State["popup"] = false
 	world.State["popuptimeout"] = 0
+	world.State["pause"] = false
 	world.Images = make(map[string]*ebiten.Image)
 	world.Images["missingtexture"] = importImage("assets/smissing.png")
 	world.Images["grass"] = importImage("assets/grass.png")
@@ -135,6 +136,73 @@ func main() {
 	player.State["hotbar2name"] = "Iron Axe"
 	player.State["hotbar2image"] = "ironaxe"
 	player.State["tooltimeout"] = 0
+	player.State["inventory"] = []Item{
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+		Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  10,
+		},
+	}
 	//find pos
 	for i := 0; i < len(world.Actors); i++ {
 		if world.Actors[i].Tag == "Player" {
@@ -255,16 +323,16 @@ func main() {
 	}
 	world.spawnActor(hand, 32, 0)
 
-	/*inv := Actor{
-		Tag:        "inv",
+	kb := Actor{
+		Tag:        "kb",
 		Renderhook: true,
-		Rendercode: inventoryRenderCode,
-		ActorLogic: inventoryActorLogic,
+		Rendercode: keybinderRenderCode,
+		ActorLogic: keybinderActorLogic,
 		Static:     true,
-		Z:          3,
 		State:      make(map[string]interface{}),
+		Unpausable: true,
 	}
-	world.spawnActor(inv, 0, 0)*/
+	world.spawnActor(kb, 0, 0)
 
 	world.generateWorld()
 	go func() {
