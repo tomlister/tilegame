@@ -11,9 +11,6 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-//var Width = 320
-//var Height = 240
-
 var Width = 640
 var Height = 480
 
