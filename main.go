@@ -80,7 +80,7 @@ func main() {
 	world.State["popup"] = false
 	world.State["popuptimeout"] = 0
 	world.Images = make(map[string]*ebiten.Image)
-	world.Images["missingtexture"] = importImage("missing.png")
+	world.Images["missingtexture"] = importImage("assets/smissing.png")
 	world.Images["grass"] = importImage("assets/grass.png")
 	world.Images["stone"] = importImage("assets/stone.png")
 	world.Images["tree0"] = importImage("assets/tree2/tree2_00.png")
@@ -110,7 +110,7 @@ func main() {
 	world.Images["wooditem"] = importImage("assets/items/wood.png")
 	//Create actors.
 	//Everything is an actor.
-	playerImage := importImage("player.png")
+	playerImage := importImage("assets/player.png")
 	player := Actor{
 		Tag:        "Player",
 		Image:      playerImage,
@@ -150,7 +150,7 @@ func main() {
 	world.CameraY = (-(200 * 16) / 2) + (Height / 2) - (playerImageSizeY / 2)
 	world.spawnActor(player, (200*16)/2, (200*16)/2)
 
-	wolfImage := importImage("wolf.png")
+	wolfImage := importImage("assets/wolf.png")
 	wolf := Actor{
 		Tag:        "Wolf",
 		Image:      wolfImage,
@@ -161,7 +161,7 @@ func main() {
 
 	world.spawnActor(wolf, ((200*16)/2)-100, ((200*16)/2)-100)
 
-	playerSplashImage := importImage("splash.png")
+	playerSplashImage := importImage("assets/splash.png")
 	playerSplash := Actor{
 		Image:      playerSplashImage,
 		AltImages:  []*ebiten.Image{playerSplashImage},
@@ -173,7 +173,7 @@ func main() {
 	playerSplashImageSizeX, playerSplashImageSizeY := playerImage.Size()
 	world.spawnActor(playerSplash, (windowsettings.Width/2)-playerSplashImageSizeX/2, (windowsettings.Height/2)-playerSplashImageSizeY/2)
 
-	arrowImage := importImage("notanarrow.png")
+	arrowImage := importImage("assets/notanarrow.png")
 	arrow := Actor{
 		Tag:        "Crosshair",
 		Image:      arrowImage,
@@ -258,7 +258,7 @@ func main() {
 	}
 	world.spawnActor(hand, 32, 0)
 
-	inv := Actor{
+	/*inv := Actor{
 		Tag:        "inv",
 		Renderhook: true,
 		Rendercode: inventoryRenderCode,
@@ -267,7 +267,7 @@ func main() {
 		Z:          3,
 		State:      make(map[string]interface{}),
 	}
-	world.spawnActor(inv, 0, 0)
+	world.spawnActor(inv, 0, 0)*/
 
 	world.generateWorld()
 	go func() {
