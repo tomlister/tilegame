@@ -33,9 +33,8 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 	viewportwidth, viewportheight := pipelinewrapper.WindowSettings.Width, pipelinewrapper.WindowSettings.Height
 	//render actors
 	for zpass := -3; zpass < 4; zpass++ {
-		for i := 0; i < len((*pipelinewrapper.World).Actors); i++ {
-			if (*pipelinewrapper.World).Actors[i].Z == zpass {
-				actor := (*pipelinewrapper.World).Actors[i]
+		for _, actor := range (*pipelinewrapper.World).Actors {
+			if actor.Z == zpass {
 				if !actor.Disabled {
 					offsetX, offsetY := actor.X+(*pipelinewrapper.World).CameraX, actor.Y+(*pipelinewrapper.World).CameraY
 					if actor.Static {
@@ -66,7 +65,6 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 							screen.DrawImage(actor.Image, opts)
 						}
 					} else {
-						//only render actors in viewport
 						actor.Rendercode(&actor, pipelinewrapper, screen)
 					}
 				}
