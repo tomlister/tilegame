@@ -60,7 +60,9 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 							opts := &ebiten.DrawImageOptions{}
 							opts.GeoM.Rotate(actor.Direction)
 							opts.GeoM.Translate(float64(offsetX), float64(offsetY))
-							screen.DrawImage(actor.Image, sopts)
+							if actor.Shadow {
+								screen.DrawImage(actor.Image, sopts)
+							}
 							screen.DrawImage(actor.Image, opts)
 						}
 					} else {

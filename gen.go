@@ -5,7 +5,6 @@ import (
 	"math/rand"
 
 	"github.com/aquilax/go-perlin"
-	"github.com/cheggaaa/pb"
 	"github.com/hajimehoshi/ebiten"
 )
 
@@ -26,7 +25,6 @@ import (
 
 func (world *World) generateWorld() {
 	fmt.Println("Generating world...")
-	bar := pb.StartNew(200 * 200)
 	alpha := 3.0
 	beta := 5.0
 	n := 5
@@ -83,7 +81,6 @@ func (world *World) generateWorld() {
 				tile.Image = world.getImage(tile.State["imagename"].(string))
 				world.spawnActorRepeatSizeDefined(tile, (x-1)*(32), (y-1)*(32), 32, 32, 1, 1)
 			}
-			bar.Increment()
 		}
 	}
 	/*watertile := Actor{
@@ -97,7 +94,6 @@ func (world *World) generateWorld() {
 	watertile.Image = world.getImage(watertile.State["imagename"].(string))
 	watertile.Tag = "water"
 	world.spawnActorRepeatSizeDefined(watertile, 0, 0, 32, 32, 20, 15)*/
-	bar.Finish()
 }
 
 /*func (world *World) generateWorldOnTheFly(x, y, w, h int) {
