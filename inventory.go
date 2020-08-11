@@ -6,10 +6,12 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
+//lint:ignore U1000 Stubs
 func inventoryActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	//animation controllers
 }
 
+//lint:ignore U1000 Stubs
 func inventoryRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
 	//blur the background
 	//box blur from: https://ebiten.org/examples/blur.html

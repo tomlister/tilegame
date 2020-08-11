@@ -36,16 +36,7 @@ func importDefaultFont() *font.Face {
 	return &mplusNormalFont
 }
 
-func (world *World) tidyBackgroundActorSetup() {
-	/*grassImage := importImage("grass.png")
-	grass := Actor{
-		Image:      grassImage,
-		ActorLogic: backgroundActorLogic,
-		Z:          -1,
-	}
-	world.spawnActorRepeat(grass, 0, 0, 50, 50)*/
-}
-
+//lint:ignore U1000 Stubs
 func importSound(path string) {
 	f, err := os.Open(path)
 	if err != nil {

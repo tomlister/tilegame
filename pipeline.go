@@ -87,7 +87,7 @@ func StartEngine(logic func(world *World), world *World, windowsettings WindowSe
 		World:          world,
 		WindowSettings: windowsettings,
 	}
-	ebiten.SetCursorVisibility(false)
+	ebiten.SetCursorMode(ebiten.CursorModeHidden)
 	if err := ebiten.Run(pw.update, windowsettings.Width, windowsettings.Height, 1, windowsettings.Name); err != nil {
 		log.Fatal(err)
 	}

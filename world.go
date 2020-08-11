@@ -59,6 +59,7 @@ func (world *World) spawnActor(actor Actor, x, y int) {
 	(*world).Actors = append((*world).Actors, actorMod)
 }
 
+//lint:ignore U1000 Engine function
 func (world *World) spawnActorRepeat(actor Actor, x, y, repeatx, repeaty int) {
 	sx, sy := actor.Image.Size()
 	for yp := 0; yp < repeaty; yp++ {

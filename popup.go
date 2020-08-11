@@ -10,7 +10,7 @@ import (
 func popupActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if (*actor).State["Interval"].(int) == 1 {
 		(*actor).State["Interval"] = 0
-		if (*world).State["popup"].(bool) == true {
+		if (*world).State["popup"].(bool) {
 			if actor.Y > 400 {
 				actor.Y -= 5
 			}

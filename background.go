@@ -1,9 +1,5 @@
 package main
 
-import (
-	"github.com/hajimehoshi/ebiten"
-)
-
 func backgroundActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 
 }
@@ -28,12 +24,4 @@ func backgroundTreeActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if (*actor).State["health"] == 0 {
 		(*actor).Kill = true
 	}
-}
-
-func backgroundActorRenderHook(actor *Actor, world *World) (*ebiten.Image, *ebiten.DrawImageOptions) {
-	img := world.getImage((*actor).State["imagename"].(string))
-	//hue := (*actor).State["Hue"].(float64)
-	opts := &ebiten.DrawImageOptions{}
-	//opts.ColorM.RotateHue(hue)
-	return img, opts
 }

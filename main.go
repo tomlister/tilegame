@@ -48,14 +48,14 @@ func logic(world *World) {
 			imgwidth, imgheight := (*world).Actors[i].Image.Size()
 			if (*world).Actors[i].Static || ((*world).CameraX+(*world).Actors[i].X+imgwidth > 0 && (*world).CameraX+(*world).Actors[i].X < Width) && ((*world).CameraY+(*world).Actors[i].Y < Height && (*world).CameraY+(*world).Actors[i].Y+imgheight > 0) {
 				(*world).Actors[i].runActorLogic(world, sceneDidMove)
-				if (*world).Actors[i].Kill == true {
+				if (*world).Actors[i].Kill {
 					(*world).Actors = append((*world).Actors[:i], (*world).Actors[i+1:]...)
 					i--
 				}
 			}
 		} else {
 			(*world).Actors[i].runActorLogic(world, sceneDidMove)
-			if (*world).Actors[i].Kill == true {
+			if (*world).Actors[i].Kill {
 				(*world).Actors = append((*world).Actors[:i], (*world).Actors[i+1:]...)
 				i--
 			}

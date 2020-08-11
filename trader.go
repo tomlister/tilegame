@@ -1,5 +1,6 @@
 package main
 
+//lint:ignore U1000 Stubs
 func traderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	i := (*world).TagTable["Player"]
 	distancex := (float64((*actor).X - ((*world).Actors[i].X)))
@@ -14,7 +15,7 @@ func traderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	} else if distancey < -128 {
 		(*actor).VelocityY -= 0.5
 	}
-	if (*world).State["FoundHenny"].(bool) == false {
+	if !(*world).State["FoundHenny"].(bool) {
 		world.UIcreateSpeechBubble("Hello!", (*actor).X, (*actor).Y, 265)
 	} else {
 		world.UIcreateSpeechBubble("Grouse", (*actor).X, (*actor).Y, 50)
