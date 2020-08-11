@@ -34,8 +34,10 @@ func logic(world *World) {
 		}
 	}
 	//set world camera offsets
-	(*world).CameraX += int((*world).VelocityX)
-	(*world).CameraY += int((*world).VelocityY)
+	if !world.State["pause"].(bool) {
+		(*world).CameraX += int((*world).VelocityX)
+		(*world).CameraY += int((*world).VelocityY)
+	}
 	for i := 0; i < len((*world).Actors); i++ {
 		sceneDidMove := false
 		if sx != 0 || sy != 0 {
@@ -59,7 +61,9 @@ func logic(world *World) {
 		}
 	}
 	//friction
-	world.applyFriction()
+	if !world.State["pause"].(bool) {
+		world.applyFriction()
+	}
 }
 
 func main() {

@@ -35,7 +35,7 @@ func inventoryGridRenderCode(pipelinewrapper PipelineWrapper, screen *ebiten.Ima
 	inventory := (*pipelinewrapper.World).Actors[i].State["inventory"].([]Item)
 	x, y := 0, 0
 	for j := 0; j < len(inventory); j++ {
-		inventory[j].inventoryGridItemRenderCode(160+(x*32), 160+(y*32), pipelinewrapper, screen)
+		inventory[j].inventoryGridItemRenderCode(160+(x*128), 160+(y*64), pipelinewrapper, screen)
 		if x == 2 {
 			x = 0
 			y++
@@ -47,7 +47,7 @@ func inventoryGridRenderCode(pipelinewrapper PipelineWrapper, screen *ebiten.Ima
 
 func (i *Item) inventoryGridItemRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
 	opts := &ebiten.DrawImageOptions{}
-	opts.GeoM.Scale(1, 1)
+	opts.GeoM.Scale(2, 2)
 	opts.GeoM.Translate(float64(x), float64(y))
 	screen.DrawImage((*pipelinewrapper.World).getImage((*i).ImageName), opts)
 }
