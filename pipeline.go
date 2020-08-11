@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"image/color"
 	"log"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/hajimehoshi/ebiten/text"
 )
 
 //PipelineWrapper Wraps logic, world and windowsettings
@@ -73,26 +71,6 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 			}
 		}
 	}
-	//render text
-	for i := 0; i < len((*pipelinewrapper.World).Text); i++ {
-		offsetX, offsetY := (*pipelinewrapper.World).Text[i].X+(*pipelinewrapper.World).CameraX, (*pipelinewrapper.World).Text[i].Y+(*pipelinewrapper.World).CameraY
-		if (offsetX+(*pipelinewrapper.World).Text[i].Width > 0 && offsetX < viewportwidth) && (offsetY < viewportheight && offsetY+20 > 0) {
-			if (*pipelinewrapper.World).Text[i].Background {
-				background, _ := ebiten.NewImage((*pipelinewrapper.World).Text[i].Width, 20, ebiten.FilterDefault)
-				opts := &ebiten.DrawImageOptions{}
-				opts.ColorM.Scale(0, 0, 0, 0.1)
-				r := float64(0xff)
-				g := float64(0xff)
-				b := float64(0xff)
-				opts.ColorM.Translate(r, g, b, 1)
-				opts.GeoM.Translate(float64(offsetX), float64(offsetY-16))
-				screen.DrawImage(background, opts)
-				background.Dispose()
-			}
-			text.Draw(screen, (*pipelinewrapper.World).Text[i].Text, (*pipelinewrapper.World.Font), offsetX, offsetY, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
-		}
-	}
-	(*pipelinewrapper.World).Text = []Text{}
 
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("%d", int(ebiten.CurrentFPS())))
 	if (*pipelinewrapper.World).Debug {
