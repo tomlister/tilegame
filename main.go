@@ -76,7 +76,9 @@ func main() {
 		Height: Height,
 	}
 	world := NewWorld()
-	world.Font = importDefaultFont()
+	world.Font = append(world.Font, importFont(14))
+	world.Font = append(world.Font, importFont(20))
+	world.Font = append(world.Font, importFont(25))
 	world.State = make(map[string]interface{})
 	world.State["popup"] = false
 	world.State["popuptimeout"] = 0

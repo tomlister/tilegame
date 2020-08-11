@@ -22,14 +22,14 @@ func importImage(path string) *ebiten.Image {
 	return importedImage
 }
 
-func importDefaultFont() *font.Face {
+func importFont(size float64) *font.Face {
 	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	const dpi = 100
 	mplusNormalFont := truetype.NewFace(tt, &truetype.Options{
-		Size:    14,
+		Size:    size,
 		DPI:     dpi,
 		Hinting: font.HintingFull,
 	})

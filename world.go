@@ -19,7 +19,7 @@ type World struct {
 	VelocityX float64
 	VelocityY float64
 	Debug     bool
-	Font      *font.Face
+	Font      []*font.Face
 	State     map[string]interface{}
 	Images    map[string]*ebiten.Image
 	TagTable  map[string]int
