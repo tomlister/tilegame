@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/text"
 )
 
 type Item struct {
@@ -24,6 +25,10 @@ func inventoryRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *
 	blackbg, _ := ebiten.NewImage(sx, sy, ebiten.FilterDefault)
 	blackbg.Fill(color.RGBA{25, 25, 25, 0xff})
 	screen.DrawImage(blackbg, &ebiten.DrawImageOptions{})
+	/*
+		Draw title
+	*/
+	text.Draw(screen, "Inventory", (*pipelinewrapper.World.Font[2]), 20, 50, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
 	/*
 		Draw the inventory grid
 	*/

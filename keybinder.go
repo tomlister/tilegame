@@ -9,6 +9,7 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		if !(*actor).State["Idown"].(bool) {
 			(*actor).State["Idown"] = true
 			if (*world).State["pause"] == false {
+				ebiten.SetCursorVisibility(true)
 				(*world).State["pause"] = true
 				inv := Actor{
 					Tag:        "inv",
@@ -22,6 +23,7 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 				}
 				world.spawnActor(inv, 0, 0)
 			} else {
+				ebiten.SetCursorVisibility(false)
 				for i := 0; i < len((*world).Actors); i++ {
 					if (*world).Actors[i].Tag == "inv" {
 						(*world).Actors[i].Kill = true
