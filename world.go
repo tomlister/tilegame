@@ -24,6 +24,7 @@ type World struct {
 	Images    map[string]*ebiten.Image
 	TagTable  map[string]int
 	Sounds    map[string]*beep.Streamer
+	Shaders   map[string]*ebiten.Shader
 }
 
 //Text Stores text data
