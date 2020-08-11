@@ -332,6 +332,7 @@ func main() {
 		State:      make(map[string]interface{}),
 		Unpausable: true,
 	}
+	kb.State["Idown"] = false
 	world.spawnActor(kb, 0, 0)
 
 	world.generateWorld()
