@@ -71,6 +71,7 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 			}
 		}
 	}
+
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("%d", int(ebiten.CurrentFPS())))
 	if (*pipelinewrapper.World).Debug {
 		ebitenutil.DebugPrint(screen, fmt.Sprintf("\nVx: %f, Vy: %f", (*pipelinewrapper.World).VelocityX, (*pipelinewrapper.World).VelocityY))

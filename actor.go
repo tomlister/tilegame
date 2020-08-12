@@ -23,9 +23,16 @@ type Actor struct {
 	Disabled   bool
 	Renderhook bool
 	Rendercode func(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image)
+	Unpausable bool
 	Kill       bool
 }
 
 func (actor *Actor) runActorLogic(world *World, sceneDidMove bool) {
-	(*actor).ActorLogic(actor, world, sceneDidMove)
+	if (*world).State["pause"].(bool) == false {
+		(*actor).ActorLogic(actor, world, sceneDidMove)
+	} else {
+		if (*actor).Unpausable == true {
+			(*actor).ActorLogic(actor, world, sceneDidMove)
+		}
+	}
 }
