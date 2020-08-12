@@ -10,7 +10,7 @@ import (
 func popupActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if (*actor).State["Interval"].(int) == 1 {
 		(*actor).State["Interval"] = 0
-		if (*world).State["popup"].(bool) == true {
+		if (*world).State["popup"].(bool) {
 			if actor.Y > 400 {
 				actor.Y -= 5
 			}
@@ -61,5 +61,5 @@ func popupRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebit
 	opts.GeoM.Scale(4, 4)
 	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y)-45)
 	screen.DrawImage((*pipelinewrapper.World).getImage("elementbar"), opts)
-	text.Draw(screen, "Mana", (*pipelinewrapper.World.Font), actor.X+20, actor.Y+30, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
+	text.Draw(screen, "Mana", (*pipelinewrapper.World.Font[0]), actor.X+20, actor.Y+30, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
 }

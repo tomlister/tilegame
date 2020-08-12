@@ -71,6 +71,7 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 			}
 		}
 	}
+
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("%d", int(ebiten.CurrentFPS())))
 	if (*pipelinewrapper.World).Debug {
 		ebitenutil.DebugPrint(screen, fmt.Sprintf("\nVx: %f, Vy: %f", (*pipelinewrapper.World).VelocityX, (*pipelinewrapper.World).VelocityY))
@@ -87,7 +88,7 @@ func StartEngine(logic func(world *World), world *World, windowsettings WindowSe
 		World:          world,
 		WindowSettings: windowsettings,
 	}
-	ebiten.SetCursorVisibility(false)
+	ebiten.SetCursorMode(ebiten.CursorModeHidden)
 	if err := ebiten.Run(pw.update, windowsettings.Width, windowsettings.Height, 1, windowsettings.Name); err != nil {
 		log.Fatal(err)
 	}

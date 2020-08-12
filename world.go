@@ -19,7 +19,7 @@ type World struct {
 	VelocityX float64
 	VelocityY float64
 	Debug     bool
-	Font      *font.Face
+	Font      []*font.Face
 	State     map[string]interface{}
 	Images    map[string]*ebiten.Image
 	TagTable  map[string]int
@@ -60,6 +60,7 @@ func (world *World) spawnActor(actor Actor, x, y int) {
 	(*world).Actors = append((*world).Actors, actorMod)
 }
 
+//lint:ignore U1000 Engine function
 func (world *World) spawnActorRepeat(actor Actor, x, y, repeatx, repeaty int) {
 	sx, sy := actor.Image.Size()
 	for yp := 0; yp < repeaty; yp++ {

@@ -22,30 +22,21 @@ func importImage(path string) *ebiten.Image {
 	return importedImage
 }
 
-func importDefaultFont() *font.Face {
+func importFont(size float64) *font.Face {
 	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	const dpi = 100
 	mplusNormalFont := truetype.NewFace(tt, &truetype.Options{
-		Size:    14,
+		Size:    size,
 		DPI:     dpi,
 		Hinting: font.HintingFull,
 	})
 	return &mplusNormalFont
 }
 
-func (world *World) tidyBackgroundActorSetup() {
-	/*grassImage := importImage("grass.png")
-	grass := Actor{
-		Image:      grassImage,
-		ActorLogic: backgroundActorLogic,
-		Z:          -1,
-	}
-	world.spawnActorRepeat(grass, 0, 0, 50, 50)*/
-}
-
+//lint:ignore U1000 Stubs
 func importSound(path string) {
 	f, err := os.Open(path)
 	if err != nil {

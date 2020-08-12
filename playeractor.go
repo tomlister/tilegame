@@ -36,7 +36,7 @@ func playerSplashActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	i := (*world).TagTable["Player"]
 	(*actor).X = (*world).Actors[i].X
 	(*actor).Y = (*world).Actors[i].Y + 3
-	if (*world).Actors[i].State["Swimming"].(bool) == true {
+	if (*world).Actors[i].State["Swimming"].(bool) {
 		(*actor).Disabled = false
 	} else {
 		(*actor).Disabled = true
