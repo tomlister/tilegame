@@ -6,6 +6,6 @@ func TitleShader() []byte {
 }
 
 //LightShader provides access to the light shader
-func Lighthader() []byte {
+func LightShader() []byte {
 	return light_go
 }
