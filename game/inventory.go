@@ -5,6 +5,9 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/text"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
 type Item struct {
@@ -14,11 +17,11 @@ type Item struct {
 }
 
 //lint:ignore U1000 Stubs
-func inventoryActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+func inventoryActorLogic(a *actor.Actor, world *world.World, sceneDidMove bool) {
 
 }
 
-func inventoryRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func inventoryRenderCode(a *actor.Actor, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	/*
 		Draw background
 	*/
@@ -36,7 +39,7 @@ func inventoryRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *
 	inventoryGridRenderCode(pipelinewrapper, screen)
 }
 
-func inventoryGridRenderCode(pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func inventoryGridRenderCode(pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	i := (*pipelinewrapper.World).TagTable["Player"]
 	inventory := (*pipelinewrapper.World).Actors[i].State["inventory"].([]Item)
 	x, y := 0, 0
@@ -51,7 +54,7 @@ func inventoryGridRenderCode(pipelinewrapper PipelineWrapper, screen *ebiten.Ima
 	}
 }
 
-func (i *Item) inventoryGridItemRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func (i *Item) inventoryGridItemRenderCode(x, y int, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(2, 2)
 	opts.GeoM.Translate(float64(x), float64(y))

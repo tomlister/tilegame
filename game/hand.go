@@ -1,11 +1,16 @@
 package main
 
-import "github.com/hajimehoshi/ebiten"
+import (
+	"github.com/hajimehoshi/ebiten"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
+)
 
-func handActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+func handActorLogic(a *actor.Actor, world *world.World, sceneDidMove bool) {
 }
 
-func handRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func handRenderCode(a *actor.Actor, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	i := (*pipelinewrapper.World).TagTable["Player"]
 	opts := &ebiten.DrawImageOptions{}
 	shadowopts := (*opts)

@@ -2,9 +2,12 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
-func hotbarActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+func hotbarActorLogic(a *actor.Actor, world *world.World, sceneDidMove bool) {
 	i := (*world).TagTable["Player"]
 	tx := 0
 	switch (*world).Actors[i].State["hotbarslot"].(int) {
@@ -17,20 +20,20 @@ func hotbarActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	default:
 		tx = -100
 	}
-	if actor.X > tx {
-		actor.X -= 4
-	} else if actor.X < tx {
-		actor.X += 4
+	if a.X > tx {
+		a.X -= 4
+	} else if a.X < tx {
+		a.X += 4
 	}
 }
 
-func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func hotbarRenderCode(a *actor.Actor, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	/*
 		Draw the hotbar slider
 	*/
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(2, 2)
-	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y))
+	opts.GeoM.Translate(float64((*a).X), float64((*a).Y))
 	screen.DrawImage((*pipelinewrapper.World).getImage("hotbar"), opts)
 	/*
 		Draw hotbar items
@@ -48,8 +51,8 @@ func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	shadowopts.ColorM.Translate(r, g, b, 0)
 	opts.GeoM.Scale(2, 2)
 	shadowopts.GeoM.Scale(2, 2)
-	shadowopts.GeoM.Translate(float64(float64(32)+(32/16)), float64((*actor).Y+(32/16)))
-	opts.GeoM.Translate(float64(32), float64((*actor).Y))
+	shadowopts.GeoM.Translate(float64(float64(32)+(32/16)), float64((*a).Y+(32/16)))
+	opts.GeoM.Translate(float64(32), float64((*a).Y))
 	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar0image"].(string)), &shadowopts)
 	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar0image"].(string)), opts)
 	/*
@@ -59,8 +62,8 @@ func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	opts.GeoM.Scale(2, 2)
 	shadowopts.GeoM.Reset()
 	shadowopts.GeoM.Scale(2, 2)
-	shadowopts.GeoM.Translate(float64(float64(96)+(32/16)), float64((*actor).Y+(32/16)))
-	opts.GeoM.Translate(float64(96), float64((*actor).Y))
+	shadowopts.GeoM.Translate(float64(float64(96)+(32/16)), float64((*a).Y+(32/16)))
+	opts.GeoM.Translate(float64(96), float64((*a).Y))
 	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar1image"].(string)), &shadowopts)
 	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar1image"].(string)), opts)
 	/*
@@ -70,8 +73,8 @@ func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	opts.GeoM.Scale(2, 2)
 	shadowopts.GeoM.Reset()
 	shadowopts.GeoM.Scale(2, 2)
-	shadowopts.GeoM.Translate(float64(float64(160)+(32/16)), float64((*actor).Y+(32/16)))
-	opts.GeoM.Translate(float64(160), float64((*actor).Y))
+	shadowopts.GeoM.Translate(float64(float64(160)+(32/16)), float64((*a).Y+(32/16)))
+	opts.GeoM.Translate(float64(160), float64((*a).Y))
 	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar2image"].(string)), &shadowopts)
 	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar2image"].(string)), opts)
 }

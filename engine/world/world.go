@@ -1,4 +1,4 @@
-package main
+package engine
 
 import (
 	"math/rand"
@@ -7,13 +7,13 @@ import (
 
 	"github.com/faiface/beep"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/tomlister/tilegame/engine/actor"
 )
 
 //World Stores all the things accessable by the rendering and logic pipelines
 type World struct {
-	Actors    []Actor
+	Actors    []actor.Actor
 	Text      []Text //Text is ephemeral, only lasts one frame.
-	Templates map[string]Actor
 	CameraX   int
 	CameraY   int
 	VelocityX float64
@@ -37,12 +37,12 @@ type Text struct {
 }
 
 //NewWorld Creates a new world with no actors
-func NewWorld() World {
+func New() World {
 	nw := World{}
 	return nw
 }
 
-func (world *World) createText(textstr string, x, y, width int, bg bool) {
+func (w *World) CreateText(textstr string, x, y, width int, bg bool) {
 	newText := Text{
 		Text:       textstr,
 		X:          x,
@@ -50,41 +50,41 @@ func (world *World) createText(textstr string, x, y, width int, bg bool) {
 		Background: bg,
 		Width:      width,
 	}
-	(*world).Text = append((*world).Text, newText)
+	(*w).Text = append((*w).Text, newText)
 }
 
-func (world *World) spawnActor(actor Actor, x, y int) {
-	actorMod := actor
+func (w *World) SpawnActor(a actor.Actor, x, y int) {
+	actorMod := a
 	actorMod.X = x
 	actorMod.Y = y
-	(*world).Actors = append((*world).Actors, actorMod)
+	(*w).Actors = append((*w).Actors, actorMod)
 }
 
 //lint:ignore U1000 Engine function
-func (world *World) spawnActorRepeat(actor Actor, x, y, repeatx, repeaty int) {
-	sx, sy := actor.Image.Size()
+func (w *World) SpawnActorRepeat(a actor.Actor, x, y, repeatx, repeaty int) {
+	sx, sy := a.Image.Size()
 	for yp := 0; yp < repeaty; yp++ {
 		for xp := 0; xp < repeatx; xp++ {
-			actorMod := actor
+			actorMod := a
 			actorMod.X = x + (xp * sx)
 			actorMod.Y = y + (yp * sy)
-			(*world).Actors = append((*world).Actors, actorMod)
+			(*w).Actors = append((*w).Actors, actorMod)
 		}
 	}
 }
 
-func (world *World) spawnActorRepeatSizeDefined(actor Actor, x, y, sx, sy, repeatx, repeaty int) {
+func (w *World) SpawnActorRepeatSizeDefined(a actor.Actor, x, y, sx, sy, repeatx, repeaty int) {
 	for yp := 0; yp < repeaty; yp++ {
 		for xp := 0; xp < repeatx; xp++ {
-			actorMod := actor
+			actorMod := a
 			actorMod.X = x + (xp * sx)
 			actorMod.Y = y + (yp * sy)
-			(*world).Actors = append((*world).Actors, actorMod)
+			(*w).Actors = append((*w).Actors, actorMod)
 		}
 	}
 }
 
-func (world *World) spawnActorRandom(actor Actor, x, y, maxx, maxy, chance int) {
+func (w *World) SpawnActorRandom(a actor.Actor, x, y, maxx, maxy, chance int) {
 	//sx, sy := actor.Image.Size()
 	yes := false
 	for i := 0; i < chance+1; i++ {
@@ -96,22 +96,22 @@ func (world *World) spawnActorRandom(actor Actor, x, y, maxx, maxy, chance int) 
 		}
 	}
 	if yes {
-		actorMod := actor
+		actorMod := a
 		actorMod.X = x
 		actorMod.Y = y
-		(*world).Actors = append((*world).Actors, actorMod)
+		(*w).Actors = append((*w).Actors, actorMod)
 	}
 }
 
-func (world *World) getImage(name string) *ebiten.Image {
-	if (*world).Images[name] != nil {
-		return (*world).Images[name]
+func (w *World) GetImage(name string) *ebiten.Image {
+	if (*w).Images[name] != nil {
+		return (*w).Images[name]
 	} else {
-		return (*world).Images["missingtexture"]
+		return (*w).Images["missingtexture"]
 	}
 }
 
-func getActorShift() (x, y float64) {
+func (w *World) GetActorShift() (x, y float64) {
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
 		y++
 	}
@@ -131,14 +131,14 @@ func getActorShift() (x, y float64) {
 	return x, y
 }
 
-func (world *World) detectCollisionPointTag(x, y int, tag string) (int, bool) {
-	for i := 0; i < len((*world).Actors); i++ {
-		if (*world).Actors[i].Tag == tag {
-			w, h := (*world).Actors[i].Image.Size()
-			if (*world).Actors[i].X < x &&
-				(*world).Actors[i].X+w > x &&
-				(*world).Actors[i].Y < y &&
-				(*world).Actors[i].Y+h > y {
+func (w *World) DetectCollisionPointTag(x, y int, tag string) (int, bool) {
+	for i := 0; i < len((*w).Actors); i++ {
+		if (*w).Actors[i].Tag == tag {
+			width, height := (*w).Actors[i].Image.Size()
+			if (*w).Actors[i].X < x &&
+				(*w).Actors[i].X+width > x &&
+				(*w).Actors[i].Y < y &&
+				(*w).Actors[i].Y+height > y {
 				return i, true
 			}
 		}

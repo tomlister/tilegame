@@ -5,18 +5,21 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/text"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
 //lint:ignore U1000 Stubs
-func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+func titleActorLogic(a *actor.Actor, world *world.World, sceneDidMove bool) {
 	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
-		(*actor).Kill = true
+		(*a).Kill = true
 		actorSetup(world, windowsettings)
 		ebiten.SetCursorMode(ebiten.CursorModeHidden)
 	}
 }
 
-func titleRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func titleRenderCode(a *actor.Actor, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	s := (*pipelinewrapper.World).Shaders["title"]
 	cx, cy := ebiten.CursorPosition()
 	op := &ebiten.DrawRectShaderOptions{}

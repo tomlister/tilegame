@@ -4,12 +4,15 @@ import (
 	"image"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
-func healthActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+func healthActorLogic(a *actor.Actor, world *world.World, sceneDidMove bool) {
 }
 
-func healthRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func healthRenderCode(a *actor.Actor, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 	/*
 		Draw the blood
 	*/
@@ -21,7 +24,7 @@ func healthRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 		mask := (*pipelinewrapper.World).getImage("vialmask").SubImage(image.Rect(0, 32-pxhealth, 32, 32))
 		opts2 := &ebiten.DrawImageOptions{}
 		opts2.GeoM.Scale(4, 4)
-		opts2.GeoM.Translate(float64((*actor).X), float64((*actor).Y+((32-pxhealth)*4)))
+		opts2.GeoM.Translate(float64((*a).X), float64((*a).Y+((32-pxhealth)*4)))
 		opts2.ColorM.Scale(0, 0, 0, 1)
 		opts2.ColorM.Translate(float64(0x8a)/0xff, float64(0x03)/0xff, float64(0x03)/0xff, 0)
 		screen.DrawImage(mask.(*ebiten.Image), opts2)
@@ -32,6 +35,6 @@ func healthRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	*/
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(4, 4)
-	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y))
+	opts.GeoM.Translate(float64((*a).X), float64((*a).Y))
 	screen.DrawImage((*pipelinewrapper.World).getImage("vial"), opts)
 }

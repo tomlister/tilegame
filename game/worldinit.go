@@ -1,67 +1,18 @@
 package main
 
 import (
-	_ "image/jpeg"
-	_ "image/png"
-	"log"
-	"os"
-	"time"
-
-	"github.com/faiface/beep"
-	"github.com/faiface/beep/mp3"
-	"github.com/faiface/beep/speaker"
-	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
-	"golang.org/x/image/font"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/asset"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
-func importImage(path string) *ebiten.Image {
-	importedImage, _, _ := ebitenutil.NewImageFromFile(path, ebiten.FilterDefault)
-	return importedImage
-}
-
-func importFont(size float64) *font.Face {
-	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
-	if err != nil {
-		log.Fatal(err)
-	}
-	const dpi = 100
-	mplusNormalFont := truetype.NewFace(tt, &truetype.Options{
-		Size:    size,
-		DPI:     dpi,
-		Hinting: font.HintingFull,
-	})
-	return &mplusNormalFont
-}
-
-//lint:ignore U1000 Stubs
-func importSound(path string) {
-	f, err := os.Open(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	streamer, format, err := mp3.Decode(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
-	buffer := beep.NewBuffer(format)
-	buffer.Append(streamer)
-	streamer.Close()
-}
-
-func loadShader(data []byte) *ebiten.Shader {
-	s, _ := ebiten.NewShader(data)
-	return s
-}
-
-func actorSetup(world *World, windowsettings WindowSettings) {
+func actorSetup(world *world.World, windowsettings pipeline.WindowSettings) {
 	//Create actors.
 	//Everything is an actor.
-	playerImage := importImage("assets/player.png")
-	player := Actor{
+	playerImage := asset.ImportImage("assets/player.png")
+	player := actor.Actor{
 		Tag:        "Player",
 		Image:      playerImage,
 		AltImages:  []*ebiten.Image{playerImage},
@@ -165,10 +116,10 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	playerImageSizeX, playerImageSizeY := playerImage.Size()
 	world.CameraX = (-(200 * 16) / 2) + (Width / 2) - (playerImageSizeX / 2)
 	world.CameraY = (-(200 * 16) / 2) + (Height / 2) - (playerImageSizeY / 2)
-	world.spawnActor(player, (200*16)/2, (200*16)/2)
+	world.SpawnActor(player, (200*16)/2, (200*16)/2)
 
-	wolfImage := importImage("assets/wolf.png")
-	wolf := Actor{
+	wolfImage := asset.ImportImage("assets/wolf.png")
+	wolf := actor.Actor{
 		Tag:        "Wolf",
 		Image:      wolfImage,
 		ActorLogic: wolfActorLogic,
@@ -176,10 +127,10 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Z:          1,
 	}
 
-	world.spawnActor(wolf, ((200*16)/2)-100, ((200*16)/2)-100)
+	world.SpawnActor(wolf, ((200*16)/2)-100, ((200*16)/2)-100)
 
-	playerSplashImage := importImage("assets/splash.png")
-	playerSplash := Actor{
+	playerSplashImage := asset.ImportImage("assets/splash.png")
+	playerSplash := actor.Actor{
 		Image:      playerSplashImage,
 		AltImages:  []*ebiten.Image{playerSplashImage},
 		ActorLogic: playerSplashActorLogic,
@@ -188,10 +139,10 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		State:      make(map[string]interface{}),
 	}
 	playerSplashImageSizeX, playerSplashImageSizeY := playerImage.Size()
-	world.spawnActor(playerSplash, (windowsettings.Width/2)-playerSplashImageSizeX/2, (windowsettings.Height/2)-playerSplashImageSizeY/2)
+	world.SpawnActor(playerSplash, (windowsettings.Width/2)-playerSplashImageSizeX/2, (windowsettings.Height/2)-playerSplashImageSizeY/2)
 
-	arrowImage := importImage("assets/notanarrow.png")
-	arrow := Actor{
+	arrowImage := asset.ImportImage("assets/notanarrow.png")
+	arrow := actor.Actor{
 		Tag:        "Crosshair",
 		Image:      arrowImage,
 		ActorLogic: crossHairActorLogic,
@@ -207,9 +158,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		}
 	}
 	arrowImageSizeX, arrowImageSizeY := arrowImage.Size()
-	world.spawnActor(arrow, (windowsettings.Width/2)-arrowImageSizeX/2, (windowsettings.Height/2)-arrowImageSizeY/2)
+	world.SpawnActor(arrow, (windowsettings.Width/2)-arrowImageSizeX/2, (windowsettings.Height/2)-arrowImageSizeY/2)
 
-	xpIcon := Actor{
+	xpIcon := actor.Actor{
 		Tag:        "xpicon",
 		Image:      world.Images["plusone"],
 		ActorLogic: backgroundActorLogic,
@@ -218,9 +169,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Z:          2,
 	}
 	xpIconImageSizeX, xpIconImageSizeY := world.Images["plusone"].Size()
-	world.spawnActor(xpIcon, (xpIconImageSizeX / 2), windowsettings.Height-xpIconImageSizeY-(xpIconImageSizeY/2))
+	world.SpawnActor(xpIcon, (xpIconImageSizeX / 2), windowsettings.Height-xpIconImageSizeY-(xpIconImageSizeY/2))
 
-	xpCounter := Actor{
+	xpCounter := actor.Actor{
 		Tag:        "xpcounter",
 		Renderhook: true,
 		Rendercode: xpcounterRenderCode,
@@ -228,9 +179,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Static:     true,
 		Z:          2,
 	}
-	world.spawnActor(xpCounter, xpIconImageSizeX*2, windowsettings.Height-(xpIconImageSizeY/2)-1)
+	world.SpawnActor(xpCounter, xpIconImageSizeX*2, windowsettings.Height-(xpIconImageSizeY/2)-1)
 
-	popup := Actor{
+	popup := actor.Actor{
 		Tag:        "popup",
 		Renderhook: true,
 		Rendercode: popupRenderCode,
@@ -240,9 +191,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		State:      make(map[string]interface{}),
 	}
 	popup.State["Interval"] = 0
-	world.spawnActor(popup, 0, windowsettings.Height)
+	world.SpawnActor(popup, 0, windowsettings.Height)
 
-	health := Actor{
+	health := actor.Actor{
 		Renderhook: true,
 		Rendercode: healthRenderCode,
 		ActorLogic: healthActorLogic,
@@ -250,9 +201,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Z:          2,
 		State:      make(map[string]interface{}),
 	}
-	world.spawnActor(health, windowsettings.Width-148, windowsettings.Height-148)
+	world.SpawnActor(health, windowsettings.Width-148, windowsettings.Height-148)
 
-	hotbar := Actor{
+	hotbar := actor.Actor{
 		Tag:        "hotbar",
 		Renderhook: true,
 		Rendercode: hotbarRenderCode,
@@ -262,9 +213,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		State:      make(map[string]interface{}),
 	}
 	hotbar.State["Interval"] = 0
-	world.spawnActor(hotbar, 32, 0)
+	world.SpawnActor(hotbar, 32, 0)
 
-	hand := Actor{
+	hand := actor.Actor{
 		Tag:        "hand",
 		Renderhook: true,
 		Rendercode: handRenderCode,
@@ -273,9 +224,9 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Z:          3,
 		State:      make(map[string]interface{}),
 	}
-	world.spawnActor(hand, 32, 0)
+	world.SpawnActor(hand, 32, 0)
 
-	kb := Actor{
+	kb := actor.Actor{
 		Tag:        "kb",
 		Renderhook: true,
 		Rendercode: keybinderRenderCode,
@@ -285,7 +236,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Unpausable: true,
 	}
 	kb.State["Idown"] = false
-	world.spawnActor(kb, 0, 0)
+	world.SpawnActor(kb, 0, 0)
 
-	world.generateWorld()
+	generateWorld(world)
 }

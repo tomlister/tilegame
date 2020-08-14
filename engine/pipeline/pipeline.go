@@ -1,4 +1,4 @@
-package main
+package engine
 
 import (
 	"fmt"
@@ -6,12 +6,13 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
 //PipelineWrapper Wraps logic, world and windowsettings
 type PipelineWrapper struct {
-	Logic          func(world *World)
-	World          *World
+	Logic          func(world *world.World)
+	World          *world.World
 	WindowSettings WindowSettings
 }
 
@@ -81,8 +82,7 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 }
 
 //StartEngine Starts the bruh engine
-func StartEngine(logic func(world *World), world *World, windowsettings WindowSettings) {
-	(*world).Images["missingtexture"] = importImage("assets/missing.png")
+func StartEngine(logic func(world *world.World), world *world.World, windowsettings WindowSettings) {
 	pw := PipelineWrapper{
 		Logic:          logic,
 		World:          world,

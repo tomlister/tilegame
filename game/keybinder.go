@@ -2,16 +2,19 @@ package main
 
 import (
 	"github.com/hajimehoshi/ebiten"
+	"github.com/tomlister/tilegame/engine/actor"
+	"github.com/tomlister/tilegame/engine/pipeline"
+	"github.com/tomlister/tilegame/engine/world"
 )
 
-func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+func keybinderActorLogic(a *actor.Actor, world *world.World, sceneDidMove bool) {
 	if ebiten.IsKeyPressed(ebiten.KeyI) {
-		if !(*actor).State["Idown"].(bool) {
-			(*actor).State["Idown"] = true
+		if !(*a).State["Idown"].(bool) {
+			(*a).State["Idown"] = true
 			if (*world).State["pause"] == false {
 				ebiten.SetCursorVisibility(true)
 				(*world).State["pause"] = true
-				inv := Actor{
+				inv := actor.Actor{
 					Tag:        "inv",
 					Renderhook: true,
 					Rendercode: inventoryRenderCode,
@@ -21,7 +24,7 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 					State:      make(map[string]interface{}),
 					Unpausable: true,
 				}
-				world.spawnActor(inv, 0, 0)
+				world.SpawnActor(inv, 0, 0)
 			} else {
 				ebiten.SetCursorVisibility(false)
 				for i := 0; i < len((*world).Actors); i++ {
@@ -33,9 +36,9 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			}
 		}
 	} else {
-		(*actor).State["Idown"] = false
+		(*a).State["Idown"] = false
 	}
 }
 
-func keybinderRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func keybinderRenderCode(a *actor.Actor, pipelinewrapper pipeline.PipelineWrapper, screen *ebiten.Image) {
 }
