@@ -3,4 +3,4 @@
 
 package shaders
 
-var title_go = []byte("// build +ignore\r\npackage shaders\r\n\r\nvar Cursor vec2\r\n\r\nfunc Fragment(position vec4, texCoord vec2, color vec4) vec4 {\r\n\tlightpos := vec3(Cursor, 50)\r\n\tlightdir := normalize(lightpos - position.xyz)\r\n\tnormal := normalize(image1TextureAt(texCoord) - 0.5)\r\n\tambient := 0.25\r\n\tdiffuse := 0.75 * max(0.0, dot(normal.xyz, lightdir))\r\n\treturn image0TextureAt(texCoord) * (ambient + diffuse)\r\n}\r\n")
+var title_go = []byte("// build +ignore\npackage shaders\n\nvar Cursor vec2\n\nfunc Fragment(position vec4, texCoord vec2, color vec4) vec4 {\n\tlightpos := vec3(Cursor, 50)\n\tlightdir := normalize(lightpos - position.xyz)\n\tnormal := normalize(image1TextureAt(texCoord) - 0.5)\n\tambient := 0.25\n\tdiffuse := 0.75 * max(0.0, dot(normal.xyz, lightdir))\n\treturn image0TextureAt(texCoord) * (ambient + diffuse)\n}\n")

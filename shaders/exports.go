@@ -4,3 +4,8 @@ package shaders
 func TitleShader() []byte {
 	return title_go
 }
+
+//LightShader provides access to the light shader
+func Lighthader() []byte {
+	return light_go
+}
