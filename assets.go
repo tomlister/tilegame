@@ -167,6 +167,24 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	world.CameraY = (-(200 * 16) / 2) + (Height / 2) - (playerImageSizeY / 2)
 	world.spawnActor(player, (200*16)/2, (200*16)/2)
 
+	(*world).State["craftable"] = []Craftable{
+		{
+			Item: Item{
+				Name:      "Wooden Sword",
+				ImageName: "woodensword",
+				Quantity:  1,
+			},
+			Needs: []Item{
+				{
+					Name:      "Wood",
+					ImageName: "wooditem",
+					Quantity:  2,
+				},
+			},
+			Quantity: 1,
+		},
+	}
+
 	wolfImage := importImage("assets/wolf.png")
 	wolf := Actor{
 		Tag:        "Wolf",
@@ -285,6 +303,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Unpausable: true,
 	}
 	kb.State["Idown"] = false
+	kb.State["Cdown"] = false
 	world.spawnActor(kb, 0, 0)
 
 	world.generateWorld()
