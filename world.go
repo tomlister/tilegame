@@ -145,3 +145,18 @@ func (world *World) detectCollisionPointTag(x, y int, tag string) (int, bool) {
 	}
 	return 0, false
 }
+
+type Rect struct {
+	x, y, w, h int
+}
+
+func detectPointRect(x, y int, rect Rect) bool {
+	if rect.x < x &&
+		rect.x+rect.w > x &&
+		rect.y < y &&
+		rect.y+rect.h > y {
+		return true
+	} else {
+		return false
+	}
+}

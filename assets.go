@@ -94,66 +94,6 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 			ImageName: "wooditem",
 			Quantity:  10,
 		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
-		Item{
-			Name:      "Wood",
-			ImageName: "wooditem",
-			Quantity:  10,
-		},
 	}
 	//find pos
 	for i := 0; i < len(world.Actors); i++ {
@@ -179,6 +119,26 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 					Name:      "Wood",
 					ImageName: "wooditem",
 					Quantity:  2,
+				},
+			},
+			Quantity: 1,
+		},
+		{
+			Item: Item{
+				Name:      "Iron Sword",
+				ImageName: "ironsword",
+				Quantity:  1,
+			},
+			Needs: []Item{
+				{
+					Name:      "Wood",
+					ImageName: "wooditem",
+					Quantity:  2,
+				},
+				{
+					Name:      "Iron Powder",
+					ImageName: "ironpowderitem",
+					Quantity:  3,
 				},
 			},
 			Quantity: 1,

@@ -43,6 +43,7 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 					State:      make(map[string]interface{}),
 					Unpausable: true,
 				}
+				crafting.State["scrolloffset"] = 0.0
 				world.spawnActor(crafting, 0, 0)
 			}
 		}
@@ -55,6 +56,8 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 				(*world).Actors[i].Kill = true
 			}
 		}
+		(*world).State["pause"] = false
+		ebiten.SetCursorVisibility(false)
 	}
 }
 

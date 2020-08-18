@@ -117,8 +117,11 @@ func main() {
 	world.Images["wooditem"] = importImage("assets/items/wood.png")
 	world.Images["titlenormal"] = importImage("assets/title/normalmap.png")
 	world.Images["titlediffuse"] = importImage("assets/title/diffuse.png")
+	world.Images["woodensword"] = importImage("assets/swords/woodensword.png")
 	world.Shaders = make(map[string]*ebiten.Shader)
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
+	world.Shaders["blur"] = loadShader(shaders.BlurShader())
+	world.Images["ironpowderitem"] = importImage("assets/items/ironpowder.png")
 
 	title := Actor{
 		Tag:        "title",

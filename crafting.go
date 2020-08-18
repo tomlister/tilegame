@@ -20,6 +20,10 @@ func craftingActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 
 func craftingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
 	/*
+		Create offscreen image
+	*/
+	//offscreen, _ := ebiten.NewImage(Width, Height, ebiten.FilterDefault)
+	/*
 		Draw background
 	*/
 	sx, sy := screen.Size()
@@ -27,23 +31,92 @@ func craftingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *e
 	blackbg.Fill(color.RGBA{25, 25, 25, 0xff})
 	screen.DrawImage(blackbg, &ebiten.DrawImageOptions{})
 	/*
+		Draw the crafting list
+	*/
+	craftingListRenderCode(actor, pipelinewrapper, screen)
+	/*
+		Draw scrollview occluder
+	*/
+	/*s := (*pipelinewrapper.World).Shaders["blur"]
+	op := &ebiten.DrawRectShaderOptions{}
+	op.Uniforms = []interface{}{
+		[]float32{float32(sx), float32(80), float32(2)}, // Blur w,h,size
+	}*/
+	//offscreensub := offscreen.SubImage(image.Rect(0, 0, sx, 80))
+	//offscreenfin, _ := ebiten.NewImageFromImage(offscreensub, ebiten.FilterDefault)
+	/*d := (*pipelinewrapper.World).getImage("titlenormal")
+	dw, dh := d.Size()
+	op.Images[0] = d
+	screen.DrawRectShader(dw, dh, s, op)*/
+	svo, _ := ebiten.NewImage(sx, 80, ebiten.FilterDefault)
+	svo.Fill(color.RGBA{25, 25, 25, 0xff})
+	screen.DrawImage(svo, &ebiten.DrawImageOptions{})
+	/*
 		Draw title
 	*/
 	text.Draw(screen, "Crafting", (*pipelinewrapper.World.Font[2]), 20, 50, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
-	/*
-		Draw the crafting list
-	*/
-	craftingListRenderCode(pipelinewrapper, screen)
 }
 
-func craftingListRenderCode(pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func craftingListRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+	_, yoff := ebiten.Wheel()
+	(*actor).State["scrolloffset"] = (*actor).State["scrolloffset"].(float64) + yoff
 	inventory := (*pipelinewrapper.World).State["craftable"].([]Craftable)
 	for j := 0; j < len(inventory); j++ {
-		inventory[j].craftingListItemRenderCode(160, 100+(j*64), pipelinewrapper, screen)
+		inventory[j].craftingListItemRenderCode(32, int((*actor).State["scrolloffset"].(float64))+100+(j*64), pipelinewrapper, screen)
 	}
 }
 
-func (i *Item) craftingListItemRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+func (i *Craftable) canCraft(player Actor) bool {
+	inventory := player.State["inventory"].([]Item)
+	needs := 0
+	fulfilled := 0
+	for _, need := range (*i).Needs {
+		needs++
+		for _, item := range inventory {
+			if item.Name == need.Name {
+				if item.Quantity >= need.Quantity {
+					fulfilled++
+				}
+			}
+		}
+	}
+	if fulfilled >= needs {
+		return true
+	}
+	return false
+}
+
+func (i *Craftable) craftingRequirementsRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+	c := 0
+	for _, item := range (*i).Needs {
+		opts := &ebiten.DrawImageOptions{}
+		opts.GeoM.Scale(2, 2)
+		opts.GeoM.Translate(float64(332+x+(64*c)), float64(100))
+		screen.DrawImage((*pipelinewrapper.World).getImage(item.ImageName), opts)
+		c++
+	}
+}
+
+func (i *Craftable) craftingListItemRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+	mx, my := ebiten.CursorPosition()
+	rect := Rect{x, y, 320, 64}
+	if detectPointRect(mx, my, rect) {
+		i.craftingRequirementsRenderCode(x, y, pipelinewrapper, screen)
+		opts := &ebiten.DrawImageOptions{}
+		itembg, _ := ebiten.NewImage(320, 64, ebiten.FilterDefault)
+		itembg.Fill(color.RGBA{75, 75, 75, 0xff})
+		opts.GeoM.Translate(float64(x), float64(y))
+		screen.DrawImage(itembg, opts)
+	}
+	p := (*pipelinewrapper.World).Actors[(*pipelinewrapper.World).TagTable["Player"]]
+	if !i.canCraft(p) {
+		opts := &ebiten.DrawImageOptions{}
+		itembg, _ := ebiten.NewImage(320, 64, ebiten.FilterDefault)
+		itembg.Fill(color.RGBA{0xff, 0, 0, 0x50})
+		opts.GeoM.Translate(float64(x), float64(y))
+		screen.DrawImage(itembg, opts)
+	}
+	text.Draw(screen, i.Item.Name, (*pipelinewrapper.World.Font[1]), x+100, y+32+10, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(2, 2)
 	opts.GeoM.Translate(float64(x), float64(y))
