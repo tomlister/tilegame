@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
@@ -56,4 +57,5 @@ func (i *Item) inventoryGridItemRenderCode(x, y int, pipelinewrapper PipelineWra
 	opts.GeoM.Scale(2, 2)
 	opts.GeoM.Translate(float64(x), float64(y))
 	screen.DrawImage((*pipelinewrapper.World).getImage((*i).ImageName), opts)
+	text.Draw(screen, fmt.Sprintf("%d", (*i).Quantity), (*pipelinewrapper.World.Font[0]), x+32, y+60, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
 }

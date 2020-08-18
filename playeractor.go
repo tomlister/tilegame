@@ -87,6 +87,11 @@ func playerAxeUse(actor *Actor, world *World) {
 		wood.State["targetx"] = cursorx - (*world).CameraX + 64 + (4 * (*world).Actors[i].State["health"].(int))
 		wood.State["targety"] = cursory - (*world).CameraY
 		wood.State["Interval"] = 0
+		wood.State["item"] = Item{
+			Name:      "Wood",
+			ImageName: "wooditem",
+			Quantity:  1,
+		}
 		(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
 		world.spawnActor(wood, cursorx-(*world).CameraX, cursory-(*world).CameraY-(*world).Actors[i].State["health"].(int)*8)
 	}

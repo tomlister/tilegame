@@ -122,6 +122,14 @@ func main() {
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
 	world.Shaders["blur"] = loadShader(shaders.BlurShader())
 	world.Images["ironpowderitem"] = importImage("assets/items/ironpowder.png")
+	world.Images["wateredgeS"] = importImage("assets/wateredgeS.png")
+	world.Images["wateredgeE"] = importImage("assets/wateredgeE.png")
+	world.Images["wateredgeW"] = importImage("assets/wateredgeW.png")
+	world.Images["wateredgeN"] = importImage("assets/wateredgeN.png")
+	world.Images["wateredgeSE"] = importImage("assets/wateredgeSE.png")
+	world.Images["wateredgeNE"] = importImage("assets/wateredgeNE.png")
+	world.Images["wateredgeSW"] = importImage("assets/wateredgeSW.png")
+	world.Images["wateredgeNW"] = importImage("assets/wateredgeNW.png")
 
 	title := Actor{
 		Tag:        "title",

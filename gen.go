@@ -38,7 +38,7 @@ func (world *World) generateWorld() {
 				Z:          -1,
 				State:      make(map[string]interface{}),
 			}
-			if height > 0.2 {
+			if height > 0.4 {
 				tile.State["world"] = true
 				tile.State["imagename"] = "stone"
 				tile.Tag = "stone"
@@ -67,13 +67,27 @@ func (world *World) generateWorld() {
 				tree.State["AnimCount"] = 0
 				tree.State["Interval"] = 0
 				world.spawnActorRandom(tree, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 1)
-			} else if height == 0.0 {
-				tile.State["world"] = true
-				tile.State["imagename"] = "beach"
-				tile.Tag = "sand"
 			} else {
 				tile.State["world"] = true
-				tile.State["imagename"] = "water"
+				if p.Noise2D(float64(x)/10, float64(y-1)/10) > 0 {
+					tile.State["imagename"] = "wateredgeS"
+				} else if p.Noise2D(float64(x)/10, float64(y+1)/10) > 0 {
+					tile.State["imagename"] = "wateredgeN"
+				} else if p.Noise2D(float64(x-1)/10, float64(y)/10) > 0 {
+					tile.State["imagename"] = "wateredgeE"
+				} else if p.Noise2D(float64(x+1)/10, float64(y)/10) > 0 {
+					tile.State["imagename"] = "wateredgeW"
+				} else if p.Noise2D(float64(x-1)/10, float64(y-1)/10) > 0 {
+					tile.State["imagename"] = "wateredgeSE"
+				} else if p.Noise2D(float64(x-1)/10, float64(y+1)/10) > 0 {
+					tile.State["imagename"] = "wateredgeNE"
+				} else if p.Noise2D(float64(x+1)/10, float64(y-1)/10) > 0 {
+					tile.State["imagename"] = "wateredgeSW"
+				} else if p.Noise2D(float64(x+1)/10, float64(y+1)/10) > 0 {
+					tile.State["imagename"] = "wateredgeNW"
+				} else {
+					tile.State["imagename"] = "water"
+				}
 				tile.Tag = "water"
 				tile.Z = -3
 			}

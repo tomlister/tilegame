@@ -9,7 +9,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 )
 
-//World Stores all the things accessable by the rendering and logic pipelines
+//World Stores all the things accessible by the rendering and logic pipelines
 type World struct {
 	Actors    []Actor
 	Text      []Text //Text is ephemeral, only lasts one frame.
