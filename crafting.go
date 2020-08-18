@@ -4,6 +4,7 @@ import (
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/audio"
 	"github.com/hajimehoshi/ebiten/text"
 )
 
@@ -15,7 +16,34 @@ type Craftable struct {
 
 //lint:ignore U1000 Stubs
 func craftingActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+	_, yoff := ebiten.Wheel()
+	(*actor).State["scrolloffset"] = (*actor).State["scrolloffset"].(float64) + yoff
+	inventory := (*world).State["craftable"].([]Craftable)
+	nohovers := 0
+	for j := 0; j < len(inventory); j++ {
+		if inventory[j].craftingListItemLogic(actor, world, 32, int((*actor).State["scrolloffset"].(float64))+100+(j*64), j) {
+			nohovers++
+		}
+	}
+	if nohovers == len(inventory) {
+		(*actor).State["hoveroffset"] = -1
+	}
+}
 
+func (i *Craftable) craftingListItemLogic(actor *Actor, world *World, x, y, pos int) bool {
+	mx, my := ebiten.CursorPosition()
+	rect := Rect{x, y, 330, 64}
+	if detectPointRect(mx, my, rect) {
+		if (*actor).State["hoveroffset"] != pos {
+			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["hover"]))
+			sePlayer.SetVolume(0.2)
+			sePlayer.Play()
+			(*actor).State["hoveroffset"] = pos
+		}
+		return false
+	} else {
+		return true
+	}
 }
 
 func craftingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
@@ -58,8 +86,6 @@ func craftingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *e
 }
 
 func craftingListRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
-	_, yoff := ebiten.Wheel()
-	(*actor).State["scrolloffset"] = (*actor).State["scrolloffset"].(float64) + yoff
 	inventory := (*pipelinewrapper.World).State["craftable"].([]Craftable)
 	for j := 0; j < len(inventory); j++ {
 		inventory[j].craftingListItemRenderCode(32, int((*actor).State["scrolloffset"].(float64))+100+(j*64), pipelinewrapper, screen)
@@ -91,7 +117,7 @@ func (i *Craftable) craftingRequirementsRenderCode(x, y int, pipelinewrapper Pip
 	for _, item := range (*i).Needs {
 		opts := &ebiten.DrawImageOptions{}
 		opts.GeoM.Scale(2, 2)
-		opts.GeoM.Translate(float64(332+x+(64*c)), float64(100))
+		opts.GeoM.Translate(float64(342+x+(64*c)), float64(100))
 		screen.DrawImage((*pipelinewrapper.World).getImage(item.ImageName), opts)
 		c++
 	}
@@ -99,11 +125,11 @@ func (i *Craftable) craftingRequirementsRenderCode(x, y int, pipelinewrapper Pip
 
 func (i *Craftable) craftingListItemRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
 	mx, my := ebiten.CursorPosition()
-	rect := Rect{x, y, 320, 64}
+	rect := Rect{x, y, 330, 64}
 	if detectPointRect(mx, my, rect) {
 		i.craftingRequirementsRenderCode(x, y, pipelinewrapper, screen)
 		opts := &ebiten.DrawImageOptions{}
-		itembg, _ := ebiten.NewImage(320, 64, ebiten.FilterDefault)
+		itembg, _ := ebiten.NewImage(330, 64, ebiten.FilterDefault)
 		itembg.Fill(color.RGBA{75, 75, 75, 0xff})
 		opts.GeoM.Translate(float64(x), float64(y))
 		screen.DrawImage(itembg, opts)
@@ -111,12 +137,12 @@ func (i *Craftable) craftingListItemRenderCode(x, y int, pipelinewrapper Pipelin
 	p := (*pipelinewrapper.World).Actors[(*pipelinewrapper.World).TagTable["Player"]]
 	if !i.canCraft(p) {
 		opts := &ebiten.DrawImageOptions{}
-		itembg, _ := ebiten.NewImage(320, 64, ebiten.FilterDefault)
+		itembg, _ := ebiten.NewImage(330, 64, ebiten.FilterDefault)
 		itembg.Fill(color.RGBA{0xff, 0, 0, 0x50})
 		opts.GeoM.Translate(float64(x), float64(y))
 		screen.DrawImage(itembg, opts)
 	}
-	text.Draw(screen, i.Item.Name, (*pipelinewrapper.World.Font[1]), x+100, y+32+10, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
+	text.Draw(screen, i.Item.Name, (*pipelinewrapper.World.Font[0]), x+100, y+32+10, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(2, 2)
 	opts.GeoM.Translate(float64(x), float64(y))

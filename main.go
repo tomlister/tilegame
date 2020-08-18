@@ -82,6 +82,7 @@ func main() {
 	world.Font = append(world.Font, importFont(14))
 	world.Font = append(world.Font, importFont(20))
 	world.Font = append(world.Font, importFont(25))
+	world.Font = append(world.Font, importFont(12))
 	world.State = make(map[string]interface{})
 	world.State["popup"] = false
 	world.State["popuptimeout"] = 0
@@ -128,6 +129,12 @@ func main() {
 	world.Images["wateredgeSW"] = importImage("assets/wateredgeSW.png")
 	world.Images["wateredgeNW"] = importImage("assets/wateredgeNW.png")
 	world.Images["rock"] = importImage("assets/rock.png")
+	world.Images["speech"] = importImage("assets/speech.png")
+	world.Sounds = make(map[string]*[]byte)
+	world.Sounds["hover"] = importSound("assets/hover.wav")
+	world.Sounds["select1"] = importSound("assets/select1.wav")
+	world.Sounds["back1"] = importSound("assets/back1.wav")
+	world.Sounds["text"] = importSound("assets/text.wav")
 	world.Shaders = make(map[string]*ebiten.Shader)
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
 	world.Shaders["blur"] = loadShader(shaders.BlurShader())

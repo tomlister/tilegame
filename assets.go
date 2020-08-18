@@ -3,13 +3,9 @@ package main
 import (
 	_ "image/jpeg"
 	_ "image/png"
+	"io/ioutil"
 	"log"
-	"os"
-	"time"
 
-	"github.com/faiface/beep"
-	"github.com/faiface/beep/mp3"
-	"github.com/faiface/beep/speaker"
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
@@ -23,33 +19,26 @@ func importImage(path string) *ebiten.Image {
 }
 
 func importFont(size float64) *font.Face {
-	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
+	tt, err := truetype.Parse(fonts.ArcadeN_ttf)
 	if err != nil {
 		log.Fatal(err)
 	}
 	const dpi = 100
-	mplusNormalFont := truetype.NewFace(tt, &truetype.Options{
+	rfont := truetype.NewFace(tt, &truetype.Options{
 		Size:    size,
 		DPI:     dpi,
 		Hinting: font.HintingFull,
 	})
-	return &mplusNormalFont
+	return &rfont
 }
 
 //lint:ignore U1000 Stubs
-func importSound(path string) {
-	f, err := os.Open(path)
+func importSound(path string) *[]byte {
+	f, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	streamer, format, err := mp3.Decode(f)
-	if err != nil {
-		log.Fatal(err)
-	}
-	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
-	buffer := beep.NewBuffer(format)
-	buffer.Append(streamer)
-	streamer.Close()
+	return &f
 }
 
 func loadShader(data []byte) *ebiten.Shader {
@@ -264,6 +253,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	}
 	kb.State["Idown"] = false
 	kb.State["Cdown"] = false
+	kb.State["Jdown"] = false
 	world.spawnActor(kb, 0, 0)
 
 	world.generateWorld()

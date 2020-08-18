@@ -5,26 +5,27 @@ import (
 
 	"golang.org/x/image/font"
 
-	"github.com/faiface/beep"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/audio"
 )
 
 //World Stores all the things accessible by the rendering and logic pipelines
 type World struct {
-	Actors    []Actor
-	Text      []Text //Text is ephemeral, only lasts one frame.
-	Templates map[string]Actor
-	CameraX   int
-	CameraY   int
-	VelocityX float64
-	VelocityY float64
-	Debug     bool
-	Font      []*font.Face
-	State     map[string]interface{}
-	Images    map[string]*ebiten.Image
-	TagTable  map[string]int
-	Sounds    map[string]*beep.Streamer
-	Shaders   map[string]*ebiten.Shader
+	Actors       []Actor
+	Text         []Text //Text is ephemeral, only lasts one frame.
+	Templates    map[string]Actor
+	CameraX      int
+	CameraY      int
+	VelocityX    float64
+	VelocityY    float64
+	Debug        bool
+	Font         []*font.Face
+	State        map[string]interface{}
+	Images       map[string]*ebiten.Image
+	TagTable     map[string]int
+	Sounds       map[string]*[]byte
+	Shaders      map[string]*ebiten.Shader
+	AudioContext *audio.Context
 }
 
 //Text Stores text data
@@ -39,6 +40,8 @@ type Text struct {
 //NewWorld Creates a new world with no actors
 func NewWorld() World {
 	nw := World{}
+	audioContext, _ := audio.NewContext(44100)
+	nw.AudioContext = audioContext
 	return nw
 }
 
