@@ -82,7 +82,6 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 
 //StartEngine Starts the bruh engine
 func StartEngine(logic func(world *World), world *World, windowsettings WindowSettings) {
-	(*world).Images["missingtexture"] = importImage("assets/missing.png")
 	pw := PipelineWrapper{
 		Logic:          logic,
 		World:          world,

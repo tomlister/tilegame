@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"log"
@@ -12,13 +14,14 @@ import (
 	"github.com/faiface/beep/speaker"
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
+	"github.com/tomlister/tilegame/assets"
 	"golang.org/x/image/font"
 )
 
-func importImage(path string) *ebiten.Image {
-	importedImage, _, _ := ebitenutil.NewImageFromFile(path, ebiten.FilterDefault)
+func importImage(data []byte) *ebiten.Image {
+	img, _, _ := image.Decode(bytes.NewReader(data))
+	importedImage, _ := ebiten.NewImageFromImage(img, ebiten.FilterDefault)
 	return importedImage
 }
 
@@ -60,7 +63,7 @@ func loadShader(data []byte) *ebiten.Shader {
 func actorSetup(world *World, windowsettings WindowSettings) {
 	//Create actors.
 	//Everything is an actor.
-	playerImage := importImage("assets/player.png")
+	playerImage := importImage(assets.PLAYER_go)
 	player := Actor{
 		Tag:        "Player",
 		Image:      playerImage,
@@ -145,7 +148,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		},
 	}
 
-	wolfImage := importImage("assets/wolf.png")
+	wolfImage := importImage(assets.WOLF_go)
 	wolf := Actor{
 		Tag:        "Wolf",
 		Image:      wolfImage,
@@ -156,7 +159,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 
 	world.spawnActor(wolf, ((200*16)/2)-100, ((200*16)/2)-100)
 
-	playerSplashImage := importImage("assets/splash.png")
+	playerSplashImage := importImage(assets.SPLASH_go)
 	playerSplash := Actor{
 		Image:      playerSplashImage,
 		AltImages:  []*ebiten.Image{playerSplashImage},
@@ -168,7 +171,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	playerSplashImageSizeX, playerSplashImageSizeY := playerImage.Size()
 	world.spawnActor(playerSplash, (windowsettings.Width/2)-playerSplashImageSizeX/2, (windowsettings.Height/2)-playerSplashImageSizeY/2)
 
-	arrowImage := importImage("assets/notanarrow.png")
+	arrowImage := importImage(assets.NOTANARROW_go)
 	arrow := Actor{
 		Tag:        "Crosshair",
 		Image:      arrowImage,
