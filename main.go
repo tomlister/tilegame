@@ -130,6 +130,7 @@ func main() {
 	world.Images["wateredgeNE"] = importImage("assets/wateredgeNE.png")
 	world.Images["wateredgeSW"] = importImage("assets/wateredgeSW.png")
 	world.Images["wateredgeNW"] = importImage("assets/wateredgeNW.png")
+	world.Images["rock"] = importImage("assets/rock.png")
 
 	title := Actor{
 		Tag:        "title",
