@@ -14,6 +14,15 @@ func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		actorSetup(world, windowsettings)
 		ebiten.SetCursorMode(ebiten.CursorModeHidden)
 	}
+	mx, my := ebiten.CursorPosition()
+	rect := Rect{(Width / 2) - 75, Height - 100, 140, 50}
+	if detectPointRect(mx, my, rect) {
+		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+			(*actor).Kill = true
+			actorSetup(world, windowsettings)
+			ebiten.SetCursorMode(ebiten.CursorModeHidden)
+		}
+	}
 }
 
 func titleRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
@@ -34,5 +43,19 @@ func titleRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebit
 	/*
 		Start Text
 	*/
-	text.Draw(screen, "Press ENTER to Start", (*pipelinewrapper.World.Font[1]), 175, Height-50, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
+	//mx, my := ebiten.CursorPosition()
+	rect := Rect{(Width / 2) - 75, Height - 100, 140, 50}
+	opts := &ebiten.DrawImageOptions{}
+	itembg, _ := ebiten.NewImage(rect.w, rect.h, ebiten.FilterDefault)
+	itembg.Fill(color.RGBA{0xff, 0xff, 0xff, 0xff})
+	opts.GeoM.Translate(float64(rect.x), float64(rect.y))
+	screen.DrawImage(itembg, opts)
+	/*if detectPointRect(mx, my, rect) {
+		opts := &ebiten.DrawImageOptions{}
+		itembg, _ := ebiten.NewImage(320, 64, ebiten.FilterDefault)
+		itembg.Fill(color.RGBA{0xff, 0xff, 0xff, 0xff})
+		opts.GeoM.Translate(float64(rect.x), float64(rect.y))
+		screen.DrawImage(itembg, opts)
+	}*/
+	text.Draw(screen, "Start", (*pipelinewrapper.World.Font[1]), rect.x+32, rect.y+35, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
 }

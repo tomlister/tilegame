@@ -87,7 +87,7 @@ func main() {
 	world.State["popuptimeout"] = 0
 	world.State["pause"] = false
 	world.Images = make(map[string]*ebiten.Image)
-	world.Images["missingtexture"] = importImage("assets/smissing.png")
+	world.Images["missingtexture"] = importImage("assets/missing.png")
 	world.Images["grass"] = importImage("assets/grass.png")
 	world.Images["stone"] = importImage("assets/stone.png")
 	world.Images["tree0"] = importImage("assets/tree2/tree2_00.png")
@@ -118,9 +118,6 @@ func main() {
 	world.Images["titlenormal"] = importImage("assets/title/normalmap.png")
 	world.Images["titlediffuse"] = importImage("assets/title/diffuse.png")
 	world.Images["woodensword"] = importImage("assets/swords/woodensword.png")
-	world.Shaders = make(map[string]*ebiten.Shader)
-	world.Shaders["title"] = loadShader(shaders.TitleShader())
-	world.Shaders["blur"] = loadShader(shaders.BlurShader())
 	world.Images["ironpowderitem"] = importImage("assets/items/ironpowder.png")
 	world.Images["wateredgeS"] = importImage("assets/wateredgeS.png")
 	world.Images["wateredgeE"] = importImage("assets/wateredgeE.png")
@@ -131,6 +128,9 @@ func main() {
 	world.Images["wateredgeSW"] = importImage("assets/wateredgeSW.png")
 	world.Images["wateredgeNW"] = importImage("assets/wateredgeNW.png")
 	world.Images["rock"] = importImage("assets/rock.png")
+	world.Shaders = make(map[string]*ebiten.Shader)
+	world.Shaders["title"] = loadShader(shaders.TitleShader())
+	world.Shaders["blur"] = loadShader(shaders.BlurShader())
 
 	title := Actor{
 		Tag:        "title",
