@@ -73,18 +73,8 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Slot: 0,
 		Slots: [3]Item{
 			{
-				Name:      "Wand",
-				ImageName: "purplewand",
-				Quantity:  1,
-			},
-			{
-				Name:      "Iron Sword",
-				ImageName: "ironsword",
-				Quantity:  1,
-			},
-			{
-				Name:      "Iron Axe",
-				ImageName: "ironaxe",
+				Name:      "Wooden Axe",
+				ImageName: "woodenaxe",
 				Quantity:  1,
 			},
 		},
@@ -121,6 +111,21 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 					Name:      "Wood",
 					ImageName: "wooditem",
 					Quantity:  2,
+				},
+			},
+			Quantity: 1,
+		},
+		{
+			Item: Item{
+				Name:      "Wooden Axe",
+				ImageName: "woodenaxe",
+				Quantity:  1,
+			},
+			Needs: []Item{
+				{
+					Name:      "Wood",
+					ImageName: "wooditem",
+					Quantity:  3,
 				},
 			},
 			Quantity: 1,

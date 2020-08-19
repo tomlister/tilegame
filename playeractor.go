@@ -123,6 +123,8 @@ func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
 		playerWandShoot(actor, world)
 	case "Iron Axe":
 		playerAxeUse(actor, world)
+	case "Wooden Axe":
+		playerAxeUse(actor, world)
 	}
 }
 
