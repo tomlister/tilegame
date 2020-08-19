@@ -131,7 +131,7 @@ func tradeChoiceRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, scree
 	opts.GeoM.Scale(4, 4)
 	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y))
 	if (*actor).State["pos"].(int) == 0 {
-		opts.ColorM.Translate(float64(-1), float64(0), float64(-1), float64(-(175 / 255)))
+		opts.ColorM.Translate(float64(-0.75), float64(0), float64(-0.75), float64(-(175 / 255)))
 	}
 	screen.DrawImage((*pipelinewrapper.World).getImage("choice"), opts)
 	text.Draw(screen, (*actor).State["choice1text"].(string), (*pipelinewrapper.World.Font[0]), (*actor).X+10, (*actor).Y+22, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
@@ -142,7 +142,7 @@ func tradeChoiceRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, scree
 	opts.GeoM.Scale(4, 4)
 	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y+64))
 	if (*actor).State["pos"].(int) == 1 {
-		opts.ColorM.Translate(float64(-1), float64(0), float64(-1), float64(-(175 / 255)))
+		opts.ColorM.Translate(float64(-0.75), float64(0), float64(-0.75), float64(-(175 / 255)))
 	}
 	screen.DrawImage((*pipelinewrapper.World).getImage("choice"), opts)
 	text.Draw(screen, (*actor).State["choice2text"].(string), (*pipelinewrapper.World.Font[0]), (*actor).X+10, (*actor).Y+64+22, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
