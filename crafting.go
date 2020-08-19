@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten"
@@ -158,6 +159,7 @@ func (i *Craftable) craftingRequirementsRenderCode(x, y int, pipelinewrapper Pip
 		opts.GeoM.Scale(2, 2)
 		opts.GeoM.Translate(float64(342+x+(64*c)), float64(100))
 		screen.DrawImage((*pipelinewrapper.World).getImage(item.ImageName), opts)
+		text.Draw(screen, fmt.Sprintf("%d", item.Quantity), (*pipelinewrapper.World.Font[0]), 342+x+(64*c)+32, 100+60, color.RGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xff})
 		c++
 	}
 }
