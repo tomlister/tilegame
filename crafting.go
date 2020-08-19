@@ -52,9 +52,8 @@ func (i *Craftable) craftingListItemLogic(actor *Actor, world *World, x, y, pos 
 			(*actor).State["hoveroffset"] = pos
 		}
 		return false
-	} else {
-		return true
 	}
+	return true
 }
 
 func (i *Craftable) craftItem(player Actor) {
