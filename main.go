@@ -69,7 +69,7 @@ func logic(world *World) {
 }
 
 var windowsettings = WindowSettings{
-	Name:   "hahahahahahahahha lo",
+	Name:   "GOexplore!",
 	Width:  Width,
 	Height: Height,
 }
