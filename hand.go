@@ -9,14 +9,7 @@ func handRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebite
 	i := (*pipelinewrapper.World).TagTable["Player"]
 	opts := &ebiten.DrawImageOptions{}
 	shadowopts := (*opts)
-	imagename := ""
-	if (*pipelinewrapper.World).Actors[i].State["hotbarslot"].(int) == 0 {
-		imagename = (*pipelinewrapper.World).Actors[i].State["hotbar0image"].(string)
-	} else if (*pipelinewrapper.World).Actors[i].State["hotbarslot"].(int) == 1 {
-		imagename = (*pipelinewrapper.World).Actors[i].State["hotbar1image"].(string)
-	} else if (*pipelinewrapper.World).Actors[i].State["hotbarslot"].(int) == 2 {
-		imagename = (*pipelinewrapper.World).Actors[i].State["hotbar2image"].(string)
-	}
+	imagename := (*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[(*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slot].ImageName
 	shadowopts.ColorM.Scale(0, 0, 0, 0.5)
 	r := float64(0x00)
 	g := float64(0x00)

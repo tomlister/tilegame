@@ -25,3 +25,9 @@ func backgroundTreeActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		(*actor).Kill = true
 	}
 }
+
+func backgroundRockActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+	if (*actor).State["health"] == 0 {
+		(*actor).Kill = true
+	}
+}

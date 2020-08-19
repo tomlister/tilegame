@@ -95,6 +95,26 @@ func playerAxeUse(actor *Actor, world *World) {
 		(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
 		world.spawnActor(wood, cursorx-(*world).CameraX, cursory-(*world).CameraY-(*world).Actors[i].State["health"].(int)*8)
 	}
+	i, collided = world.detectCollisionPointTag(cursorx-(*world).CameraX, cursory-(*world).CameraY, "rock")
+	if collided {
+		ironpowder := Actor{
+			Image:      (*world).getImage("ironpowderitem"),
+			ActorLogic: droppedItemActorLogic,
+			Shadow:     true,
+			Z:          0,
+			State:      make(map[string]interface{}),
+		}
+		ironpowder.State["targetx"] = cursorx - (*world).CameraX + 64 + (4 * (*world).Actors[i].State["health"].(int))
+		ironpowder.State["targety"] = cursory - (*world).CameraY
+		ironpowder.State["Interval"] = 0
+		ironpowder.State["item"] = Item{
+			Name:      "Iron Powder",
+			ImageName: "ironpowderitem",
+			Quantity:  1,
+		}
+		(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
+		world.spawnActor(ironpowder, cursorx-(*world).CameraX, cursory-(*world).CameraY-(*world).Actors[i].State["health"].(int)*8)
+	}
 }
 
 func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
@@ -112,22 +132,22 @@ func playerActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	(*actor).X -= int((*actor).VelocityX)
 	(*actor).Y -= int((*actor).VelocityY)
 	if ebiten.IsKeyPressed(ebiten.Key1) {
-		(*actor).State["hotbarslot"] = 0
+		hotbar := (*actor).State["hotbar"].(Hotbar)
+		hotbar.Slot = 0
+		(*actor).State["hotbar"] = hotbar
 	} else if ebiten.IsKeyPressed(ebiten.Key2) {
-		(*actor).State["hotbarslot"] = 1
+		hotbar := (*actor).State["hotbar"].(Hotbar)
+		hotbar.Slot = 1
+		(*actor).State["hotbar"] = hotbar
 	} else if ebiten.IsKeyPressed(ebiten.Key3) {
-		(*actor).State["hotbarslot"] = 2
+		hotbar := (*actor).State["hotbar"].(Hotbar)
+		hotbar.Slot = 2
+		(*actor).State["hotbar"] = hotbar
 	}
 	if (*actor).State["tooltimeout"].(int) == 0 {
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 			(*actor).State["tooltimeout"] = 1
-			if (*actor).State["hotbarslot"].(int) == 0 {
-				playerHotbarSwitch(actor, world, (*actor).State["hotbar0name"].(string))
-			} else if (*actor).State["hotbarslot"].(int) == 1 {
-				playerHotbarSwitch(actor, world, (*actor).State["hotbar1name"].(string))
-			} else if (*actor).State["hotbarslot"].(int) == 2 {
-				playerHotbarSwitch(actor, world, (*actor).State["hotbar2name"].(string))
-			}
+			playerHotbarSwitch(actor, world, (*actor).State["hotbar"].(Hotbar).Slots[(*actor).State["hotbar"].(Hotbar).Slot].Name)
 		}
 	}
 	if (*actor).State["tooltimeout"].(int) == 5 {

@@ -23,13 +23,27 @@ func droppedItemActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	collided, _, _ := actor.DetectPlayerCollision(world)
 	i := (*world).TagTable["Player"]
 	if collided {
-		for j, item := range (*world).Actors[i].State["inventory"].([]Item) {
+		exists := false
+		for j, item := range (*world).Actors[i].State["inventory"].([9]Item) {
 			if item.Name == (*actor).State["item"].(Item).Name {
 				tempitem := item
 				tempitem.Quantity = tempitem.Quantity + (*actor).State["item"].(Item).Quantity
-				(*world).Actors[i].State["inventory"].([]Item)[j] = tempitem
+				inv := (*world).Actors[i].State["inventory"].([9]Item)
+				inv[j] = tempitem
+				(*world).Actors[i].State["inventory"] = inv
+				exists = true
+				break
 			}
-			break
+		}
+		if !exists {
+			inv := (*world).Actors[i].State["inventory"].([9]Item)
+			for i := 0; i < len(inv); i++ {
+				if inv[i].ImageName == "" {
+					inv[i] = (*actor).State["item"].(Item)
+					break
+				}
+			}
+			(*world).Actors[i].State["inventory"] = inv
 		}
 		(*actor).Kill = true
 	}

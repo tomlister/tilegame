@@ -43,11 +43,13 @@ func (world *World) generateWorld() {
 				tile.State["imagename"] = "stone"
 				tile.Tag = "stone"
 				rock := Actor{
+					Tag:        "rock",
 					Image:      (*world).Images["rock"],
-					ActorLogic: backgroundActorLogic,
+					ActorLogic: backgroundRockActorLogic,
 					Z:          0,
 					State:      make(map[string]interface{}),
 				}
+				rock.State["health"] = 2
 				world.spawnActorRandom(rock, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 3)
 				chest := Actor{
 					Image:      (*world).Images["chestclosed"],
@@ -58,6 +60,16 @@ func (world *World) generateWorld() {
 				}
 				chest.State["Opened"] = false
 				world.spawnActorRandom(chest, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 1)
+				if height > 0.65 {
+					trader := Actor{
+						Image:      (*world).Images["trader"],
+						ActorLogic: traderActorLogic,
+						Z:          0,
+						State:      make(map[string]interface{}),
+					}
+					trader.State["inspeech"] = false
+					world.spawnActorRandom(trader, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 1)
+				}
 			} else if height > 0 {
 				tile.State["world"] = true
 				tile.State["imagename"] = "grass"

@@ -22,6 +22,8 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 					State:      make(map[string]interface{}),
 					Unpausable: true,
 				}
+				inv.State["move"] = nil
+				inv.State["mousedown"] = false
 				world.spawnActor(inv, 0, 0)
 			}
 		}
@@ -46,6 +48,7 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 				}
 				crafting.State["scrolloffset"] = 0.0
 				crafting.State["hoveroffset"] = 0
+				crafting.State["buttondown"] = false
 				world.spawnActor(crafting, 0, 0)
 			}
 		}
@@ -100,6 +103,8 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			speech.State["interval"] = 0
 			speech.State["text"] = "Test dialog..."
 			speech.State["pos"] = 0
+			speech.State["arrowyoffset"] = 0
+			speech.State["time"] = 0
 			world.spawnActor(speech, Width/2, Height-128)
 		}
 	} else {

@@ -7,7 +7,7 @@ import (
 func hotbarActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	i := (*world).TagTable["Player"]
 	tx := 0
-	switch (*world).Actors[i].State["hotbarslot"].(int) {
+	switch (*world).Actors[i].State["hotbar"].(Hotbar).Slot {
 	case 0:
 		tx = 32
 	case 1:
@@ -50,8 +50,8 @@ func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	shadowopts.GeoM.Scale(2, 2)
 	shadowopts.GeoM.Translate(float64(float64(32)+(32/16)), float64((*actor).Y+(32/16)))
 	opts.GeoM.Translate(float64(32), float64((*actor).Y))
-	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar0image"].(string)), &shadowopts)
-	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar0image"].(string)), opts)
+	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[0].ImageName), &shadowopts)
+	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[0].ImageName), opts)
 	/*
 		1
 	*/
@@ -61,8 +61,8 @@ func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	shadowopts.GeoM.Scale(2, 2)
 	shadowopts.GeoM.Translate(float64(float64(96)+(32/16)), float64((*actor).Y+(32/16)))
 	opts.GeoM.Translate(float64(96), float64((*actor).Y))
-	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar1image"].(string)), &shadowopts)
-	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar1image"].(string)), opts)
+	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[1].ImageName), &shadowopts)
+	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[1].ImageName), opts)
 	/*
 		2
 	*/
@@ -72,6 +72,6 @@ func hotbarRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebi
 	shadowopts.GeoM.Scale(2, 2)
 	shadowopts.GeoM.Translate(float64(float64(160)+(32/16)), float64((*actor).Y+(32/16)))
 	opts.GeoM.Translate(float64(160), float64((*actor).Y))
-	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar2image"].(string)), &shadowopts)
-	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar2image"].(string)), opts)
+	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[2].ImageName), &shadowopts)
+	screen.DrawImage((*pipelinewrapper.World).getImage((*pipelinewrapper.World).Actors[i].State["hotbar"].(Hotbar).Slots[2].ImageName), opts)
 }

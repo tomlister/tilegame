@@ -69,15 +69,28 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	player.State["mana"] = 200
 	player.State["manamax"] = 200
 	player.State["health"] = 100
-	player.State["hotbarslot"] = 0
-	player.State["hotbar0name"] = "Wand"
-	player.State["hotbar0image"] = "purplewand"
-	player.State["hotbar1name"] = "Iron Sword"
-	player.State["hotbar1image"] = "ironsword"
-	player.State["hotbar2name"] = "Iron Axe"
-	player.State["hotbar2image"] = "ironaxe"
+	player.State["hotbar"] = Hotbar{
+		Slot: 0,
+		Slots: [3]Item{
+			{
+				Name:      "Wand",
+				ImageName: "purplewand",
+				Quantity:  1,
+			},
+			{
+				Name:      "Iron Sword",
+				ImageName: "ironsword",
+				Quantity:  1,
+			},
+			{
+				Name:      "Iron Axe",
+				ImageName: "ironaxe",
+				Quantity:  1,
+			},
+		},
+	}
 	player.State["tooltimeout"] = 0
-	player.State["inventory"] = []Item{
+	player.State["inventory"] = [9]Item{
 		Item{
 			Name:      "Wood",
 			ImageName: "wooditem",

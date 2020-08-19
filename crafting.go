@@ -31,9 +31,20 @@ func craftingActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 }
 
 func (i *Craftable) craftingListItemLogic(actor *Actor, world *World, x, y, pos int) bool {
+	p := (*world).Actors[(*world).TagTable["Player"]]
 	mx, my := ebiten.CursorPosition()
 	rect := Rect{x, y, 330, 64}
 	if detectPointRect(mx, my, rect) {
+		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+			if !(*actor).State["buttondown"].(bool) {
+				(*actor).State["buttondown"] = true
+				if i.canCraft(p) {
+					i.craftItem(p)
+				}
+			}
+		} else {
+			(*actor).State["buttondown"] = false
+		}
 		if (*actor).State["hoveroffset"] != pos {
 			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["hover"]))
 			sePlayer.SetVolume(0.2)
@@ -44,6 +55,35 @@ func (i *Craftable) craftingListItemLogic(actor *Actor, world *World, x, y, pos 
 	} else {
 		return true
 	}
+}
+
+func (i *Craftable) craftItem(player Actor) {
+	inventory := player.State["inventory"].([9]Item)
+	for _, need := range (*i).Needs {
+		for i, item := range inventory {
+			if item.Name == need.Name {
+				if item.Quantity >= need.Quantity {
+					if player.State["inventory"].([9]Item)[i].Quantity-need.Quantity == 0 {
+						inv := player.State["inventory"].([9]Item)
+						inv[i] = Item{}
+						player.State["inventory"] = inv
+					} else {
+						inv := player.State["inventory"].([9]Item)
+						inv[i].Quantity = player.State["inventory"].([9]Item)[i].Quantity - need.Quantity
+						player.State["inventory"] = inv
+					}
+				}
+			}
+		}
+	}
+	inv := player.State["inventory"].([9]Item)
+	for j := 0; j < len(inv); j++ {
+		if inv[j].ImageName == "" {
+			inv[j] = (*i).Item
+			break
+		}
+	}
+	player.State["inventory"] = inv
 }
 
 func craftingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
@@ -93,7 +133,7 @@ func craftingListRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, scree
 }
 
 func (i *Craftable) canCraft(player Actor) bool {
-	inventory := player.State["inventory"].([]Item)
+	inventory := player.State["inventory"].([9]Item)
 	needs := 0
 	fulfilled := 0
 	for _, need := range (*i).Needs {
