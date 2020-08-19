@@ -152,6 +152,24 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		},
 	}
 
+	(*world).State["tradable"] = []Tradable{
+		{
+			Item: Item{
+				Name:      "Wand",
+				ImageName: "purplewand",
+				Quantity:  1,
+			},
+			Needs: []Item{
+				{
+					Name:      "Mana Crystal",
+					ImageName: "manacrystal",
+					Quantity:  3,
+				},
+			},
+			Quantity: 1,
+		},
+	}
+
 	wolfImage := importImage("assets/wolf.png")
 	wolf := Actor{
 		Tag:        "Wolf",

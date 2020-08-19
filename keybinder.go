@@ -57,7 +57,8 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) && (*world).State["pause"].(bool) == true {
 		for i := 0; i < len((*world).Actors); i++ {
-			if (*world).Actors[i].Tag == "crafting" || (*world).Actors[i].Tag == "inv" {
+			switch (*world).Actors[i].Tag {
+			case "crafting", "inv", "trade":
 				(*world).Actors[i].Kill = true
 			}
 		}
@@ -101,10 +102,11 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 				State:      make(map[string]interface{}),
 			}
 			speech.State["interval"] = 0
-			speech.State["text"] = "Test dialog..."
+			speech.State["text"] = "Would you like\nto trade?"
 			speech.State["pos"] = 0
 			speech.State["arrowyoffset"] = 0
 			speech.State["time"] = 0
+			speech.State["keydown"] = false
 			world.spawnActor(speech, Width/2, Height-128)
 		}
 	} else {

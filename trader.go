@@ -29,6 +29,7 @@ func traderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			speech.State["pos"] = 0
 			speech.State["arrowyoffset"] = 0
 			speech.State["time"] = 0
+			speech.State["keydown"] = false
 			world.spawnActor(speech, Width/2, Height-128)
 		}
 	}
@@ -37,19 +38,27 @@ func traderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 //lint:ignore U1000 Stubs
 func tradeOfferActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
-		choices := Actor{
-			Tag:        "choices",
-			Renderhook: true,
-			Rendercode: tradeChoiceRenderLogic,
-			ActorLogic: tradeChoiceActorLogic,
-			Static:     true,
-			Z:          3,
-			State:      make(map[string]interface{}),
+		if !(*actor).State["keydown"].(bool) {
+			(*actor).State["keydown"] = true
 		}
-		choices.State["choice1text"] = "Sure."
-		choices.State["choice2text"] = "No thanks!"
-		world.spawnActor(choices, Width/2, Height-128)
-		(*actor).Kill = true
+	} else {
+		if (*actor).State["keydown"].(bool) {
+			choices := Actor{
+				Tag:        "choices",
+				Renderhook: true,
+				Rendercode: tradeChoiceRenderLogic,
+				ActorLogic: tradeChoiceActorLogic,
+				Static:     true,
+				Z:          3,
+				State:      make(map[string]interface{}),
+			}
+			choices.State["choice1text"] = "Sure."
+			choices.State["choice2text"] = "No thanks!"
+			choices.State["pos"] = 0
+			choices.State["keydown"] = false
+			world.spawnActor(choices, Width/2, Height-128)
+			(*actor).Kill = true
+		}
 	}
 	(*actor).State["time"] = (*actor).State["time"].(int) + 1
 	if (*actor).State["interval"].(int) == 5 {
@@ -81,7 +90,37 @@ func tradeOfferRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, screen
 }
 
 func tradeChoiceActorLogic(actor *Actor, world *World, sceneDidMove bool) {
-
+	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
+		switch (*actor).State["pos"].(int) {
+		case 0:
+			if (*world).State["pause"] == false {
+				ebiten.SetCursorVisibility(true)
+				(*world).State["pause"] = true
+				ebiten.SetCursorVisibility(true)
+				trade := Actor{
+					Tag:        "trade",
+					Renderhook: true,
+					Rendercode: tradeRenderCode,
+					ActorLogic: tradeActorLogic,
+					Static:     true,
+					Z:          3,
+					State:      make(map[string]interface{}),
+				}
+				trade.State["scrolloffset"] = 0.0
+				trade.State["hoveroffset"] = 0
+				trade.State["buttondown"] = false
+				world.spawnActor(trade, 0, 0)
+			}
+			(*actor).Kill = true
+		case 1:
+			(*actor).Kill = true
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyUp) {
+		(*actor).State["pos"] = 0
+	} else if ebiten.IsKeyPressed(ebiten.KeyDown) {
+		(*actor).State["pos"] = 1
+	}
 }
 
 func tradeChoiceRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
@@ -91,6 +130,9 @@ func tradeChoiceRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, scree
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(4, 4)
 	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y))
+	if (*actor).State["pos"].(int) == 0 {
+		opts.ColorM.Translate(float64(-1), float64(0), float64(-1), float64(-(175 / 255)))
+	}
 	screen.DrawImage((*pipelinewrapper.World).getImage("choice"), opts)
 	text.Draw(screen, (*actor).State["choice1text"].(string), (*pipelinewrapper.World.Font[0]), (*actor).X+10, (*actor).Y+22, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
 	/*
@@ -99,6 +141,9 @@ func tradeChoiceRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, scree
 	opts = &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(4, 4)
 	opts.GeoM.Translate(float64((*actor).X), float64((*actor).Y+64))
+	if (*actor).State["pos"].(int) == 1 {
+		opts.ColorM.Translate(float64(-1), float64(0), float64(-1), float64(-(175 / 255)))
+	}
 	screen.DrawImage((*pipelinewrapper.World).getImage("choice"), opts)
 	text.Draw(screen, (*actor).State["choice2text"].(string), (*pipelinewrapper.World.Font[0]), (*actor).X+10, (*actor).Y+64+22, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
 }
