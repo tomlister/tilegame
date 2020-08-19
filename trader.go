@@ -49,6 +49,7 @@ func tradeOfferActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		choices.State["choice1text"] = "Sure."
 		choices.State["choice2text"] = "No thanks!"
 		world.spawnActor(choices, Width/2, Height-128)
+		(*actor).Kill = true
 	}
 	(*actor).State["time"] = (*actor).State["time"].(int) + 1
 	if (*actor).State["interval"].(int) == 5 {
