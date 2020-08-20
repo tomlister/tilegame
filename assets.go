@@ -8,6 +8,8 @@ import (
 
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/audio"
+	"github.com/hajimehoshi/ebiten/audio/wav"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"golang.org/x/image/font"
@@ -32,13 +34,17 @@ func importFont(size float64) *font.Face {
 	return &rfont
 }
 
-//lint:ignore U1000 Stubs
-func importSound(path string) *[]byte {
-	f, err := ioutil.ReadFile(path)
+func importSound(ctx *audio.Context, path string) *[]byte {
+	f, err := ebitenutil.OpenFile(path)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &f
+	stream, err := wav.Decode(ctx, f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	b, err := ioutil.ReadAll(stream)
+	return &b
 }
 
 func loadShader(data []byte) *ebiten.Shader {
