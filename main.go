@@ -76,9 +76,10 @@ var windowsettings = WindowSettings{
 
 func main() {
 
-	DEBUG := false
+	DEBUG := true
 
 	world := NewWorld()
+	world.Debug = DEBUG
 	world.Font = append(world.Font, importFont(14))
 	world.Font = append(world.Font, importFont(20))
 	world.Font = append(world.Font, importFont(25))
@@ -135,11 +136,20 @@ func main() {
 	world.Images["choice"] = importImage("assets/choice.png")
 	world.Images["woodenaxe"] = importImage("assets/axes/woodenaxe.png")
 	world.Images["manacrystal"] = importImage("assets/items/manacrystal.png")
+	world.Images["cavefloor"] = importImage("assets/cave/cavefloor.png")
+	world.Images["cavewall"] = importImage("assets/cave/cavewall.png")
+	world.Images["cavewallS"] = importImage("assets/cave/cavewallS.png")
+	world.Images["cavewallW"] = importImage("assets/cave/cavewallW.png")
+	world.Images["cavewallN"] = importImage("assets/cave/cavewallN.png")
+	world.Images["cavewallE"] = importImage("assets/cave/cavewallE.png")
+	world.Images["cavewallEFullCorner"] = importImage("assets/cave/cavewallEFullCorner.png")
 	world.Sounds = make(map[string]*[]byte)
 	world.Sounds["hover"] = importSound(world.AudioContext, "assets/hover.wav")
 	world.Sounds["select1"] = importSound(world.AudioContext, "assets/select1.wav")
 	world.Sounds["back1"] = importSound(world.AudioContext, "assets/back1.wav")
 	world.Sounds["text"] = importSound(world.AudioContext, "assets/text.wav")
+	world.Sounds["back2"] = importSound(world.AudioContext, "assets/back2.wav")
+	world.Sounds["select2"] = importSound(world.AudioContext, "assets/select2.wav")
 	world.Shaders = make(map[string]*ebiten.Shader)
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
 	world.Shaders["blur"] = loadShader(shaders.BlurShader())

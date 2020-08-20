@@ -6,6 +6,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/audio"
+	"github.com/hajimehoshi/ebiten/inpututil"
 	"github.com/hajimehoshi/ebiten/text"
 )
 
@@ -37,35 +38,32 @@ func traderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 
 //lint:ignore U1000 Stubs
 func tradeOfferActorLogic(actor *Actor, world *World, sceneDidMove bool) {
-	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
-		if !(*actor).State["keydown"].(bool) {
-			(*actor).State["keydown"] = true
+	if inpututil.IsKeyJustReleased(ebiten.KeyEnter) {
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["select2"]))
+		sePlayer.SetVolume(0.75)
+		sePlayer.Play()
+		choices := Actor{
+			Tag:        "choices",
+			Renderhook: true,
+			Rendercode: tradeChoiceRenderLogic,
+			ActorLogic: tradeChoiceActorLogic,
+			Static:     true,
+			Z:          3,
+			State:      make(map[string]interface{}),
 		}
-	} else {
-		if (*actor).State["keydown"].(bool) {
-			choices := Actor{
-				Tag:        "choices",
-				Renderhook: true,
-				Rendercode: tradeChoiceRenderLogic,
-				ActorLogic: tradeChoiceActorLogic,
-				Static:     true,
-				Z:          3,
-				State:      make(map[string]interface{}),
-			}
-			choices.State["choice1text"] = "Sure."
-			choices.State["choice2text"] = "No thanks!"
-			choices.State["pos"] = 0
-			choices.State["keydown"] = false
-			world.spawnActor(choices, Width/2, Height-128)
-			(*actor).Kill = true
-		}
+		choices.State["choice1text"] = "Sure."
+		choices.State["choice2text"] = "No thanks!"
+		choices.State["pos"] = 0
+		choices.State["keydown"] = false
+		world.spawnActor(choices, Width/2, Height-128)
+		(*actor).Kill = true
 	}
 	(*actor).State["time"] = (*actor).State["time"].(int) + 1
 	if (*actor).State["interval"].(int) == 5 {
 		if len((*actor).State["text"].(string)) > (*actor).State["pos"].(int) {
 			(*actor).State["pos"] = (*actor).State["pos"].(int) + 1
 			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["text"]))
-			sePlayer.SetVolume(0.2)
+			sePlayer.SetVolume(0.5)
 			sePlayer.Play()
 		}
 		(*actor).State["arrowyoffset"] = int(math.Sin(float64((*actor).State["time"].(int))) * 4)
@@ -93,10 +91,12 @@ func tradeChoiceActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
 		switch (*actor).State["pos"].(int) {
 		case 0:
+			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["select2"]))
+			sePlayer.SetVolume(0.75)
+			sePlayer.Play()
 			if (*world).State["pause"] == false {
 				ebiten.SetCursorVisibility(true)
 				(*world).State["pause"] = true
-				ebiten.SetCursorVisibility(true)
 				trade := Actor{
 					Tag:        "trade",
 					Renderhook: true,
@@ -113,12 +113,21 @@ func tradeChoiceActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			}
 			(*actor).Kill = true
 		case 1:
+			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["back2"]))
+			sePlayer.SetVolume(0.75)
+			sePlayer.Play()
 			(*actor).Kill = true
 		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyUp) {
+	if inpututil.IsKeyJustPressed(ebiten.KeyUp) {
 		(*actor).State["pos"] = 0
-	} else if ebiten.IsKeyPressed(ebiten.KeyDown) {
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["hover"]))
+		sePlayer.SetVolume(0.75)
+		sePlayer.Play()
+	} else if inpututil.IsKeyJustPressed(ebiten.KeyDown) {
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["hover"]))
+		sePlayer.SetVolume(0.75)
+		sePlayer.Play()
 		(*actor).State["pos"] = 1
 	}
 }

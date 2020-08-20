@@ -180,8 +180,13 @@ func inventoryGridRenderCode(pipelinewrapper PipelineWrapper, screen *ebiten.Ima
 func (i *Item) inventoryGridItemRenderCode(x, y int, pipelinewrapper PipelineWrapper, screen *ebiten.Image, actor *Actor, hotbar bool, slot int) {
 	mx, my := ebiten.CursorPosition()
 	rect := Rect{x, y, 64, 64}
+	opts := &ebiten.DrawImageOptions{}
+	griditembg, _ := ebiten.NewImage(64, 64, ebiten.FilterDefault)
+	griditembg.Fill(color.RGBA{50, 50, 50, 0xff})
+	opts.GeoM.Translate(float64(x), float64(y))
+	screen.DrawImage(griditembg, opts)
 	if detectPointRect(mx, my, rect) {
-		opts := &ebiten.DrawImageOptions{}
+		opts = &ebiten.DrawImageOptions{}
 		itembg, _ := ebiten.NewImage(64, 64, ebiten.FilterDefault)
 		itembg.Fill(color.RGBA{75, 75, 75, 0xff})
 		opts.GeoM.Translate(float64(x), float64(y))
@@ -206,7 +211,7 @@ func (i *Item) inventoryGridItemRenderCode(x, y int, pipelinewrapper PipelineWra
 			}
 		}
 	}
-	opts := &ebiten.DrawImageOptions{}
+	opts = &ebiten.DrawImageOptions{}
 	opts.GeoM.Scale(2, 2)
 	opts.GeoM.Translate(float64(x), float64(y))
 	if (*i).ImageName != "" {

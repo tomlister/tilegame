@@ -48,7 +48,7 @@ func (i *Tradable) tradeListItemLogic(actor *Actor, world *World, x, y, pos int)
 		}
 		if (*actor).State["hoveroffset"] != pos {
 			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["hover"]))
-			sePlayer.SetVolume(0.2)
+			sePlayer.SetVolume(0.75)
 			sePlayer.Play()
 			(*actor).State["hoveroffset"] = pos
 		}

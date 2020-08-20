@@ -48,7 +48,7 @@ func (i *Craftable) craftingListItemLogic(actor *Actor, world *World, x, y, pos 
 		}
 		if (*actor).State["hoveroffset"] != pos {
 			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["hover"]))
-			sePlayer.SetVolume(0.2)
+			sePlayer.SetVolume(0.75)
 			sePlayer.Play()
 			(*actor).State["hoveroffset"] = pos
 		}

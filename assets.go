@@ -299,4 +299,5 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	world.spawnActor(kb, 0, 0)
 
 	world.generateWorld()
+	world.generateDungeonWorld()
 }
