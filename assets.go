@@ -298,6 +298,25 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	kb.State["Jdown"] = false
 	world.spawnActor(kb, 0, 0)
 
+	caveMask := Actor{
+		Image:      (*world).getImage("cavemask"),
+		ActorLogic: backgroundActorLogic,
+		Static:     true,
+		Z:          3,
+	}
+	world.spawnActor(caveMask, 0, 0)
+
+	overWorldButton := Actor{
+		Renderhook: true,
+		Rendercode: caveReturnButtonRenderCode,
+		ActorLogic: caveReturnButtonActorLogic,
+		Static:     true,
+		State:      make(map[string]interface{}),
+		Z:          3,
+	}
+	overWorldButton.State["hovering"] = false
+	world.spawnActor(overWorldButton, Width-84, 20)
+
 	world.generateWorld()
 	world.generateDungeonWorld()
 }

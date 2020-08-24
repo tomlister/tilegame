@@ -1,6 +1,12 @@
 package main
 
+import "github.com/hajimehoshi/ebiten"
+
 func backgroundActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+
+}
+
+func backgroundActorRenderLogic(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
 
 }
 

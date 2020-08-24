@@ -159,6 +159,7 @@ func (world *World) generateDungeonWorld() {
 			}
 		}
 	}
+	tpsearch := true
 	for y := 1; y < 51; y++ {
 		for x := 1; x < 51; x++ {
 			height := p.Noise2D(float64(x)/10, float64(y)/10)
@@ -190,6 +191,24 @@ func (world *World) generateDungeonWorld() {
 			if tile.State["imagename"] != nil {
 				tile.Image = world.getImage(tile.State["imagename"].(string))
 				world.spawnActorRepeatSizeDefined(tile, (-x-1)*(32), (-y-1)*(32), 32, 32, 1, 1)
+			}
+			if tpsearch == true {
+				if p.Noise2D(float64(x)/10, float64(y+1)/10) < 0 {
+					if p.Noise2D(float64(x-1)/10, float64(y)/10) < 0 {
+						if p.Noise2D(float64(x)/10, float64(y-1)/10) < 0 {
+							if p.Noise2D(float64(x+1)/10, float64(y)/10) < 0 {
+								caveEntry := Actor{
+									Tag:        "CaveEntryPoint",
+									ActorLogic: backgroundActorLogic,
+									Rendercode: backgroundActorRenderLogic,
+									Renderhook: true,
+								}
+								world.spawnActor(caveEntry, (-x-1)*(32), (-y-1)*(32))
+								tpsearch = false
+							}
+						}
+					}
+				}
 			}
 		}
 	}
