@@ -105,6 +105,7 @@ func tradeChoiceActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 					Static:     true,
 					Z:          3,
 					State:      make(map[string]interface{}),
+					Unpausable: true,
 				}
 				trade.State["scrolloffset"] = 0.0
 				trade.State["hoveroffset"] = 0

@@ -26,9 +26,9 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 	pipelinewrapper.Logic(pipelinewrapper.World)
 	if ebiten.IsDrawingSkipped() {
 		//Drop frames
-		println("Skipped A Frame")
 		return nil
 	}
+	currentlyRendering := 0
 	//Draw World
 	viewportwidth, viewportheight := pipelinewrapper.WindowSettings.Width, pipelinewrapper.WindowSettings.Height
 	//render actors
@@ -45,6 +45,7 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 						imgwidth, imgheight := actor.Image.Size()
 						//only render actors in viewport
 						if (offsetX+imgwidth > 0 && offsetX < viewportwidth) && (offsetY < viewportheight && offsetY+imgheight > 0) {
+							currentlyRendering++
 							sopts := &ebiten.DrawImageOptions{}
 							if actor.Shadow {
 								sopts.ColorM.Scale(0, 0, 0, 0.5)
@@ -65,6 +66,7 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 							screen.DrawImage(actor.Image, opts)
 						}
 					} else {
+						currentlyRendering++
 						actor.Rendercode(&actor, pipelinewrapper, screen)
 					}
 				}
@@ -76,6 +78,7 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 	if (*pipelinewrapper.World).Debug {
 		ebitenutil.DebugPrint(screen, fmt.Sprintf("\nVx: %f, Vy: %f", (*pipelinewrapper.World).VelocityX, (*pipelinewrapper.World).VelocityY))
 		ebitenutil.DebugPrint(screen, fmt.Sprintf("\n\nCx: %d, Cy: %d", (*pipelinewrapper.World).CameraX, (*pipelinewrapper.World).CameraY))
+		ebitenutil.DebugPrint(screen, fmt.Sprintf("\n\n\nActors: %d, Rendering: %d", len((*pipelinewrapper.World).Actors), currentlyRendering))
 	}
 	return nil
 }

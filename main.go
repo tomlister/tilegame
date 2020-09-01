@@ -147,6 +147,7 @@ func main() {
 	world.Images["buttonhover"] = importImage("assets/buttonhover.png")
 	world.Images["overworld"] = importImage("assets/overworld.png")
 	world.Images["cavemask"] = importImage("assets/cavemask.png")
+	world.Images["hole"] = importImage("assets/hole.png")
 	world.Sounds = make(map[string]*[]byte)
 	world.Sounds["hover"] = importSound(world.AudioContext, "assets/hover.wav")
 	world.Sounds["select1"] = importSound(world.AudioContext, "assets/select1.wav")
@@ -157,6 +158,7 @@ func main() {
 	world.Shaders = make(map[string]*ebiten.Shader)
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
 	world.Shaders["blur"] = loadShader(shaders.BlurShader())
+	world.TagTable = make(map[string]int)
 
 	title := Actor{
 		Tag:        "title",

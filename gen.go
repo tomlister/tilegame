@@ -69,6 +69,13 @@ func (world *World) generateWorld() {
 					trader.State["inspeech"] = false
 					world.spawnActorRandom(trader, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 1)
 				}
+				hole := Actor{
+					Image:      (*world).Images["hole"],
+					ActorLogic: caveHoleActorLogic,
+					Z:          0,
+					State:      make(map[string]interface{}),
+				}
+				world.spawnActorRandom(hole, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 4)
 			} else if height > 0 {
 				tile.State["world"] = true
 				tile.State["imagename"] = "grass"
@@ -155,7 +162,7 @@ func (world *World) generateDungeonWorld() {
 			}
 			if tile.State["imagename"] != nil {
 				tile.Image = world.getImage(tile.State["imagename"].(string))
-				world.spawnActorRepeatSizeDefined(tile, (-x-1)*(32), (-y-1)*(32), 32, 32, 1, 1)
+				world.spawnActorRepeatSizeDefined(tile, (5000+x-1)*(32), (5000+y-1)*(32), 32, 32, 1, 1)
 			}
 		}
 	}
@@ -170,7 +177,7 @@ func (world *World) generateDungeonWorld() {
 			}
 			if height < 0 {
 				tile.State["world"] = true
-				if p.Noise2D(float64(x)/10, float64(y+1)/10) >= 0 {
+				/*if p.Noise2D(float64(x)/10, float64(y+1)/10) >= 0 {
 					tile.State["imagename"] = "cavewallS"
 				} else if p.Noise2D(float64(x-1)/10, float64(y)/10) >= 0 {
 					tile.State["imagename"] = "cavewallW"
@@ -178,15 +185,26 @@ func (world *World) generateDungeonWorld() {
 					tile.State["imagename"] = "cavewallN"
 				} else if p.Noise2D(float64(x+1)/10, float64(y)/10) >= 0 {
 					tile.State["imagename"] = "cavewallE"
-				}
-				if p.Noise2D(float64(x+1)/10, float64(y)/10) >= 0 {
+				}*/
+				/*if p.Noise2D(float64(x+1)/10, float64(y)/10) >= 0 {
 					if p.Noise2D(float64(x)/10, float64(y+1)/10) >= 0 {
 						if p.Noise2D(float64(x)/10, float64(y-1)/10) >= 0 {
 							tile.State["imagename"] = "cavewallEFullCorner"
 						}
 					}
-				}
+				}*/
 				tile.Tag = "cavewall"
+			} else {
+				tile.State["imagename"] = "cavefloor"
+				manaCrystal := Actor{
+					Tag:        "manacrystal",
+					Image:      (*world).Images["manacrystal"],
+					ActorLogic: backgroundRockActorLogic,
+					Z:          0,
+					State:      make(map[string]interface{}),
+				}
+				manaCrystal.State["health"] = 1
+				world.spawnActorRandom(manaCrystal, (-x-1)*(32), (-y-1)*(32), ((-x-1)*(32))+32, ((-y-1)*(32))+32, 2)
 			}
 			if tile.State["imagename"] != nil {
 				tile.Image = world.getImage(tile.State["imagename"].(string))
@@ -204,7 +222,14 @@ func (world *World) generateDungeonWorld() {
 									Renderhook: true,
 								}
 								world.spawnActor(caveEntry, (-x-1)*(32), (-y-1)*(32))
-								tpsearch = false
+								//find pos
+								for i := 0; i < len(world.Actors); i++ {
+									if world.Actors[i].Tag == "CaveEntryPoint" {
+										world.TagTable["CaveEntryPoint"] = i
+										tpsearch = false
+										break
+									}
+								}
 							}
 						}
 					}

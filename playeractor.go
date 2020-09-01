@@ -115,6 +115,26 @@ func playerAxeUse(actor *Actor, world *World) {
 		(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
 		world.spawnActor(ironpowder, cursorx-(*world).CameraX, cursory-(*world).CameraY-(*world).Actors[i].State["health"].(int)*8)
 	}
+	i, collided = world.detectCollisionPointTag(cursorx-(*world).CameraX, cursory-(*world).CameraY, "manacrystal")
+	if collided {
+		manaCrystal := Actor{
+			Image:      (*world).getImage("manacrystal"),
+			ActorLogic: droppedItemActorLogic,
+			Shadow:     true,
+			Z:          0,
+			State:      make(map[string]interface{}),
+		}
+		manaCrystal.State["targetx"] = cursorx - (*world).CameraX + 64 + (4 * (*world).Actors[i].State["health"].(int))
+		manaCrystal.State["targety"] = cursory - (*world).CameraY
+		manaCrystal.State["Interval"] = 0
+		manaCrystal.State["item"] = Item{
+			Name:      "Mana Crystal",
+			ImageName: "manacrystal",
+			Quantity:  1,
+		}
+		(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
+		world.spawnActor(manaCrystal, cursorx-(*world).CameraX, cursory-(*world).CameraY-(*world).Actors[i].State["health"].(int)*8)
+	}
 }
 
 func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {

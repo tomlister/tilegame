@@ -15,7 +15,6 @@ type Tradable struct {
 	Quantity int
 }
 
-//lint:ignore U1000 Stubs
 func tradeActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	_, yoff := ebiten.Wheel()
 	(*actor).State["scrolloffset"] = (*actor).State["scrolloffset"].(float64) + yoff
@@ -40,6 +39,7 @@ func (i *Tradable) tradeListItemLogic(actor *Actor, world *World, x, y, pos int)
 			if !(*actor).State["buttondown"].(bool) {
 				(*actor).State["buttondown"] = true
 				if i.canTrade(p) {
+					fmt.Println("trade")
 					i.tradeItem(p)
 				}
 			}
@@ -64,10 +64,12 @@ func (i *Tradable) tradeItem(player Actor) {
 			if item.Name == need.Name {
 				if item.Quantity >= need.Quantity {
 					if player.State["inventory"].([9]Item)[i].Quantity-need.Quantity == 0 {
+						// If item quantity is 1 then make item nil
 						inv := player.State["inventory"].([9]Item)
 						inv[i] = Item{}
 						player.State["inventory"] = inv
 					} else {
+						// Remove quantity of item from inventory
 						inv := player.State["inventory"].([9]Item)
 						inv[i].Quantity = player.State["inventory"].([9]Item)[i].Quantity - need.Quantity
 						player.State["inventory"] = inv
