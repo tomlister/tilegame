@@ -47,6 +47,22 @@ func (actor *Actor) DetectTileTouch(world *World, tag string) bool {
 	return false
 }
 
+func (actor *Actor) DetectCollision(world *World) bool {
+	aw, ah := (*actor).Image.Size()
+	for i := 0; i < len((*world).Actors); i++ {
+		if (*world).Actors[i].Collidable {
+			paw, pah := 32, 32
+			if (*world).Actors[i].X < (*actor).X+aw &&
+				(*world).Actors[i].X+paw > (*actor).X &&
+				(*world).Actors[i].Y < (*actor).Y+ah &&
+				(*world).Actors[i].Y+pah > (*actor).Y {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (actor *Actor) DetectBehind(world *World) bool {
 	aw, ah := (*actor).Image.Size()
 	i := (*world).TagTable["Player"]

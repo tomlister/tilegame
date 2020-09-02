@@ -1,13 +1,24 @@
 // build +ignore
 package shaders
 
-/*var LightColor vec3
-var LightPoint vec2
+/*
+var LightColor [40]vec3
+var LightIntensity [40]float
+var LightPoint [40]vec2
+var LightAmount float
 
 func Fragment(position vec4, texCoord vec2, color vec4) vec4 {
-	distance := length(LightPoint*16 - position.xy*16)
-	attenuation := 1.0 / distance
-	col := vec4(attenuation, attenuation, attenuation, pow(attenuation, 3)) * vec4(LightColor, 1)
-	return image0TextureAt(texCoord) + col
+	finalcol := vec4(0.0, 0.0, 0.0, 0.0)
+	for i := 0; i < 40; i++ {
+		if float(i) == LightAmount {
+			break
+		}
+		intensity := LightIntensity[i]
+		distance := length(LightPoint[i] - position.xy)*256
+		attenuation := intensity / (4*3.1415926538*pow(distance, 2))
+		col := vec4(attenuation, attenuation, attenuation, pow(attenuation, 3)) * vec4(LightColor[i], 1)
+		finalcol = finalcol + col
+	}
+	return image0TextureAt(texCoord) * finalcol
 }
 */

@@ -3,6 +3,8 @@ package main
 import "github.com/hajimehoshi/ebiten"
 
 func handActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+	i := (*world).TagTable["Player"]
+	(*actor).CustomRenderDestination = (*world).Actors[i].CustomRenderDestination
 }
 
 func handRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {

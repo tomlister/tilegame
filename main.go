@@ -17,7 +17,7 @@ var Width = 640
 var Height = 480
 
 func logic(world *World) {
-	sx, sy := getActorShift()
+	sx, sy := world.getActorShift()
 	(*world).VelocityX += sx / 4
 	(*world).VelocityY += sy / 4
 	//collision pass
@@ -28,7 +28,8 @@ func logic(world *World) {
 				if didCollide {
 					if rx != 0 {
 						(*world).VelocityX = 0
-					} else if ry != 0 {
+					}
+					if ry != 0 {
 						(*world).VelocityY = 0
 					}
 				}
@@ -143,6 +144,7 @@ func main() {
 	world.Images["cavewallN"] = importImage("assets/cave/cavewallN.png")
 	world.Images["cavewallE"] = importImage("assets/cave/cavewallE.png")
 	world.Images["cavewallEFullCorner"] = importImage("assets/cave/cavewallEFullCorner.png")
+	world.Images["caveblack"] = importImage("assets/cave/caveblack.png")
 	world.Images["button"] = importImage("assets/button.png")
 	world.Images["buttonhover"] = importImage("assets/buttonhover.png")
 	world.Images["overworld"] = importImage("assets/overworld.png")
@@ -157,8 +159,10 @@ func main() {
 	world.Sounds["select2"] = importSound(world.AudioContext, "assets/select2.wav")
 	world.Shaders = make(map[string]*ebiten.Shader)
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
-	world.Shaders["blur"] = loadShader(shaders.BlurShader())
+	world.Shaders["lighting"] = loadShader(shaders.LightShader())
 	world.TagTable = make(map[string]int)
+	offscreen, _ := ebiten.NewImage(Width, Height, ebiten.FilterDefault)
+	world.Images["offscreen"] = offscreen
 
 	title := Actor{
 		Tag:        "title",

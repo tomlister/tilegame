@@ -1,6 +1,9 @@
 package main
 
 import (
+	"math"
+	"math/rand"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 )
@@ -25,6 +28,7 @@ func caveReturnButtonActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
 			cx, cy := (*actor).State["cx"].(int), (*actor).State["cy"].(int)
 			i := (*world).TagTable["Player"]
+			(*world).Actors[i].CustomRenderDestination = false
 			(*world).Actors[i].VelocityX = 0
 			(*world).Actors[i].VelocityY = 0
 			(*world).Actors[i].X = cx + 64
@@ -68,14 +72,25 @@ func caveHoleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if col {
 		c := (*world).TagTable["CaveEntryPoint"]
 		i := (*world).TagTable["Player"]
-		caveMask := Actor{
+		/*caveMask := Actor{
 			Image:      (*world).getImage("cavemask"),
 			ActorLogic: backgroundActorLogic,
 			Static:     true,
-			Z:          3,
+			Z:          2,
 			Tag:        "cavemask",
 		}
-		world.spawnActor(caveMask, 0, 0)
+		world.spawnActor(caveMask, 0, 0)*/
+		caveLighting := Actor{
+			Renderhook: true,
+			Rendercode: caveLightingRenderCode,
+			ActorLogic: backgroundActorLogic,
+			Static:     true,
+			Z:          2,
+			Tag:        "cavemask",
+			State:      make(map[string]interface{}),
+		}
+		caveLighting.State["time"] = 0.0
+		world.spawnActor(caveLighting, 0, 0)
 		overWorldButton := Actor{
 			Renderhook: true,
 			Rendercode: caveReturnButtonRenderCode,
@@ -97,5 +112,79 @@ func caveHoleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		sx, sy := (*world).Actors[i].Image.Size()
 		(*world).CameraX = (-((*world).Actors[c].X)) + (Width / 2) - (sx / 2)
 		(*world).CameraY = (-((*world).Actors[c].Y)) + (Height / 2) - (sy / 2)
+		(*world).Actors[i].RenderDestination = (*world).getImage("offscreen")
+		(*world).Actors[i].CustomRenderDestination = true
 	}
 }
+
+func caveLightingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
+	(*actor).State["time"] = (*actor).State["time"].(float64) + 1
+	s := (*pipelinewrapper.World).Shaders["lighting"]
+	op := &ebiten.DrawRectShaderOptions{}
+	lightcolors := []float32{}      // 3 floats per light
+	lightpositions := []float32{}   // 2 floats per light
+	lightintensities := []float32{} // 40 max
+	lightamount := float32(0.0)     // 40 max
+	viewportwidth, viewportheight := pipelinewrapper.WindowSettings.Width, pipelinewrapper.WindowSettings.Height
+	for _, a := range (*pipelinewrapper.World).Actors {
+		if a.Tag == "manacrystal" || a.Tag == "manacrystaldropped" {
+			offsetX, offsetY := a.X+(*pipelinewrapper.World).CameraX, a.Y+(*pipelinewrapper.World).CameraY
+			imgwidth, imgheight := a.Image.Size()
+			if (offsetX+imgwidth > 0 && offsetX < viewportwidth) && (offsetY < viewportheight && offsetY+imgheight > 0) {
+				lightamount++
+				color := []float32{0xDA, 0x96, 0xF7}
+				lightcolors = append(lightcolors, color...)
+				position := []float32{float32(offsetX) + 16, float32(offsetY) + 16}
+				lightpositions = append(lightpositions, position...)
+				lightintensities = append(lightintensities, float32(math.Sin((2*rand.Float64()+(*actor).State["time"].(float64))/100)*5000000))
+			}
+		}
+		if lightamount == 40 {
+			break
+		}
+	}
+	if (len(lightcolors)/3)-int(40) != 0 {
+		lightcolors = append(lightcolors, make([]float32, int(120-(lightamount*3)))...)
+	}
+	if (len(lightpositions)/2)-int(40) != 0 {
+		lightpositions = append(lightpositions, make([]float32, int(80-(lightamount*2)))...)
+	}
+	if len(lightintensities)-int(40) != 0 {
+		lightintensities = append(lightintensities, make([]float32, int(40-(lightamount)))...)
+	}
+	op.Uniforms = []interface{}{
+		lightcolors,            // LightColors
+		lightintensities,       // LightIntensities
+		lightpositions,         // LightPositions
+		[]float32{lightamount}, // LightAmount
+	}
+	offscreen := (*pipelinewrapper.World).getImage("offscreen")
+	osw, osh := offscreen.Size()
+	op.Images[0] = offscreen
+	screen.DrawRectShader(osw, osh, s, op)
+}
+
+/*
+lightcolors := make([]float32, 60)    // 3 floats per light
+	lightpositions := make([]float32, 40) // 2 floats per light
+	lightamount := float32(0.0)           // 20 max
+	viewportwidth, viewportheight := pipelinewrapper.WindowSettings.Width, pipelinewrapper.WindowSettings.Height
+	for _, a := range (*pipelinewrapper.World).Actors {
+		if a.Tag == "manacrystal" {
+			offsetX, offsetY := a.X+(*pipelinewrapper.World).CameraX, a.Y+(*pipelinewrapper.World).CameraY
+			imgwidth, imgheight := a.Image.Size()
+			if (offsetX+imgwidth > 0 && offsetX < viewportwidth) && (offsetY < viewportheight && offsetY+imgheight > 0) {
+				lightcolors[int(lightamount)] = float32(0xDA)
+				lightcolors[int(lightamount)+1] = float32(0x96)
+				lightcolors[int(lightamount)+2] = float32(0xF7)
+				lightpositions[int(lightamount)] = float32(offsetX)
+				lightpositions[int(lightamount)+1] = float32(offsetY)
+				lightamount++
+			}
+		}
+		if lightamount == 20 {
+			break
+		}
+	}
+
+*/

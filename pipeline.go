@@ -46,6 +46,10 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 						//only render actors in viewport
 						if (offsetX+imgwidth > 0 && offsetX < viewportwidth) && (offsetY < viewportheight && offsetY+imgheight > 0) {
 							currentlyRendering++
+							renderDst := screen
+							if actor.CustomRenderDestination {
+								renderDst = actor.RenderDestination
+							}
 							sopts := &ebiten.DrawImageOptions{}
 							if actor.Shadow {
 								sopts.ColorM.Scale(0, 0, 0, 0.5)
@@ -61,13 +65,17 @@ func (pipelinewrapper PipelineWrapper) update(screen *ebiten.Image) error {
 							opts.GeoM.Rotate(actor.Direction)
 							opts.GeoM.Translate(float64(offsetX), float64(offsetY))
 							if actor.Shadow {
-								screen.DrawImage(actor.Image, sopts)
+								renderDst.DrawImage(actor.Image, sopts)
 							}
-							screen.DrawImage(actor.Image, opts)
+							renderDst.DrawImage(actor.Image, opts)
 						}
 					} else {
 						currentlyRendering++
-						actor.Rendercode(&actor, pipelinewrapper, screen)
+						renderDst := screen
+						if actor.CustomRenderDestination {
+							renderDst = actor.RenderDestination
+						}
+						actor.Rendercode(&actor, pipelinewrapper, renderDst)
 					}
 				}
 			}

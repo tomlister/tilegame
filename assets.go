@@ -48,7 +48,10 @@ func importSound(ctx *audio.Context, path string) *[]byte {
 }
 
 func loadShader(data []byte) *ebiten.Shader {
-	s, _ := ebiten.NewShader(data)
+	s, err := ebiten.NewShader(data)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	return s
 }
 
@@ -224,7 +227,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		ActorLogic: backgroundActorLogic,
 		Static:     true,
 		Shadow:     true,
-		Z:          2,
+		Z:          3,
 	}
 	xpIconImageSizeX, xpIconImageSizeY := world.Images["plusone"].Size()
 	world.spawnActor(xpIcon, (xpIconImageSizeX / 2), windowsettings.Height-xpIconImageSizeY-(xpIconImageSizeY/2))
@@ -235,7 +238,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Rendercode: xpcounterRenderCode,
 		ActorLogic: xpcounterActorLogic,
 		Static:     true,
-		Z:          2,
+		Z:          3,
 	}
 	world.spawnActor(xpCounter, xpIconImageSizeX*2, windowsettings.Height-(xpIconImageSizeY/2)-1)
 
@@ -245,7 +248,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Rendercode: popupRenderCode,
 		ActorLogic: popupActorLogic,
 		Static:     true,
-		Z:          2,
+		Z:          3,
 		State:      make(map[string]interface{}),
 	}
 	popup.State["Interval"] = 0
@@ -256,7 +259,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Rendercode: healthRenderCode,
 		ActorLogic: healthActorLogic,
 		Static:     true,
-		Z:          2,
+		Z:          3,
 		State:      make(map[string]interface{}),
 	}
 	world.spawnActor(health, windowsettings.Width-148, windowsettings.Height-148)
@@ -267,20 +270,21 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 		Rendercode: hotbarRenderCode,
 		ActorLogic: hotbarActorLogic,
 		Static:     true,
-		Z:          2,
+		Z:          3,
 		State:      make(map[string]interface{}),
 	}
 	hotbar.State["Interval"] = 0
 	world.spawnActor(hotbar, 32, 0)
 
 	hand := Actor{
-		Tag:        "hand",
-		Renderhook: true,
-		Rendercode: handRenderCode,
-		ActorLogic: handActorLogic,
-		Static:     true,
-		Z:          3,
-		State:      make(map[string]interface{}),
+		Tag:               "hand",
+		Renderhook:        true,
+		Rendercode:        handRenderCode,
+		ActorLogic:        handActorLogic,
+		RenderDestination: (*world).getImage("offscreen"),
+		Static:            true,
+		Z:                 2,
+		State:             make(map[string]interface{}),
 	}
 	world.spawnActor(hand, 32, 0)
 

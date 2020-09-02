@@ -3,4 +3,4 @@
 
 package shaders
 
-var light_go = []byte("// build +ignore\npackage shaders\n\nvar LightColor vec3\nvar LightPoint vec2\n\nfunc Fragment(position vec4, texCoord vec2, color vec4) vec4 {\n\tdistance := length(LightPoint*16 - position.xy*16)\n\tattenuation := 1.0 / distance\n\tcol := vec4(attenuation, attenuation, attenuation, pow(attenuation, 3)) * vec4(LightColor, 1)\n\treturn image0TextureAt(texCoord) + col\n}\n")
+var light_go = []byte("// build +ignore\npackage shaders\n\nvar LightColor [40]vec3\nvar LightIntensity [40]float\nvar LightPoint [40]vec2\nvar LightAmount float\n\nfunc Fragment(position vec4, texCoord vec2, color vec4) vec4 {\n\tfinalcol := vec4(0.0, 0.0, 0.0, 0.0)\n\tfor i := 0; i < 40; i++ {\n\t\tif float(i) == LightAmount {\n\t\t\tbreak\n\t\t}\n\t\tintensity := LightIntensity[i]\n\t\tdistance := length(LightPoint[i]-position.xy) * 256\n\t\tattenuation := intensity / (4 * 3.1415926538 * pow(distance, 2))\n\t\tcol := vec4(attenuation, attenuation, attenuation, pow(attenuation, 3)) * vec4(LightColor[i], 1)\n\t\tfinalcol = finalcol + col\n\t}\n\treturn image0TextureAt(texCoord) * finalcol\n}\n")

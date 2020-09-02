@@ -114,24 +114,45 @@ func (world *World) getImage(name string) *ebiten.Image {
 	}
 }
 
-func getActorShift() (x, y float64) {
+func (w *World) getActorShift() (x, y float64) {
+	i := (*w).TagTable["Player"]
+	//if i != 0 {
+	vactor := (*w).Actors[i]
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		y++
+		vactor.Y++
+		if !vactor.DetectCollision(w) {
+			vactor.Y--
+			y++
+		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		y--
+		vactor.Y--
+		if !vactor.DetectCollision(w) {
+			vactor.Y++
+			y--
+		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		x++
+		vactor.X++
+		if !vactor.DetectCollision(w) {
+			vactor.X--
+			x++
+		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		x--
+		vactor.X--
+		if !vactor.DetectCollision(w) {
+			vactor.X++
+			x--
+		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyShift) {
 		x = x * 2
 		y = y * 2
 	}
 	return x, y
+	/*}
+	return 0, 0*/
 }
 
 func (world *World) detectCollisionPointTag(x, y int, tag string) (int, bool) {

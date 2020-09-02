@@ -118,11 +118,14 @@ func playerAxeUse(actor *Actor, world *World) {
 	i, collided = world.detectCollisionPointTag(cursorx-(*world).CameraX, cursory-(*world).CameraY, "manacrystal")
 	if collided {
 		manaCrystal := Actor{
-			Image:      (*world).getImage("manacrystal"),
-			ActorLogic: droppedItemActorLogic,
-			Shadow:     true,
-			Z:          0,
-			State:      make(map[string]interface{}),
+			Image:                   (*world).getImage("manacrystal"),
+			Tag:                     "manacrystaldropped",
+			ActorLogic:              droppedItemActorLogic,
+			Shadow:                  true,
+			Z:                       0,
+			State:                   make(map[string]interface{}),
+			RenderDestination:       (*world).getImage("offscreen"),
+			CustomRenderDestination: true,
 		}
 		manaCrystal.State["targetx"] = cursorx - (*world).CameraX + 64 + (4 * (*world).Actors[i].State["health"].(int))
 		manaCrystal.State["targety"] = cursory - (*world).CameraY

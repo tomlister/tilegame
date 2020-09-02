@@ -10,7 +10,7 @@ func LightShader() []byte {
 	return light_go
 }
 
-//LightShader provides access to the blur shader
+//BlurShader provides access to the blur shader
 func BlurShader() []byte {
 	return blur_go
 }
