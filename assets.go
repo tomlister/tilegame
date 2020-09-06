@@ -302,6 +302,11 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	kb.State["Jdown"] = false
 	world.spawnActor(kb, 0, 0)
 
+	sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["gopherland"]))
+	world.State["musicplayer"] = sePlayer
+	world.State["musicplayer"].(*audio.Player).SetVolume(0.25)
+	world.State["musicplayer"].(*audio.Player).Play()
+
 	world.generateWorld()
 	world.generateDungeonWorld()
 }

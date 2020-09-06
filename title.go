@@ -8,8 +8,13 @@ import (
 	"github.com/hajimehoshi/ebiten/text"
 )
 
-//lint:ignore U1000 Stubs
 func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
+	/*if !(*actor).State["playing"].(bool) {
+		(*actor).State["playing"] = true
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["select1"]))
+		(*actor).State["player"] = sePlayer
+		(*actor).State["player"].(*audio.Player).Play()
+	}*/
 	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
 		(*actor).Kill = true
 		actorSetup(world, windowsettings)
@@ -19,6 +24,7 @@ func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	rect := Rect{(Width / 2) - 75, Height - 100, 140, 50}
 	if detectPointRect(mx, my, rect) {
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
+			//(*actor).State["player"].(*audio.Player).Pause()
 			(*actor).Kill = true
 			actorSetup(world, windowsettings)
 			ebiten.SetCursorMode(ebiten.CursorModeHidden)

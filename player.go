@@ -1,6 +1,12 @@
 package main
 
-import "github.com/hajimehoshi/ebiten"
+import (
+	"math"
+	"math/rand"
+
+	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/audio"
+)
 
 func resetAllStrafe(actor *Actor) {
 	(*actor).X += (*actor).State["StrafeLeft"].(int)
@@ -127,6 +133,46 @@ func playerAxeUse(actor *Actor, world *World) {
 	}
 }
 
+func knockBack(px, py, ex, ey int) (float64, float64) {
+	theta := math.Atan2(float64(py-ey), float64(px-ex))
+	knockbackDistance := 10.0
+	x := knockbackDistance * math.Cos(theta)
+	y := knockbackDistance * math.Sin(theta)
+	return x, y
+}
+
+func playerSwordUse(actor *Actor, world *World) {
+	cursorx, cursory := ebiten.CursorPosition()
+	i, collided := world.detectCollisionPointTag(cursorx-(*world).CameraX, cursory-(*world).CameraY, "enemy")
+	if collided {
+		vx, vy := knockBack(actor.X, actor.Y, (*world).Actors[i].X, (*world).Actors[i].Y)
+		(*world).Actors[i].VelocityX += vx
+		(*world).Actors[i].VelocityY += vy
+		profile := (*world).Actors[i].State["profile"].(Enemy)
+		profile.Health = profile.Health - 1
+		(*world).Actors[i].State["profile"] = profile
+		minusone := Actor{
+			Image:      (*world).getImage("minusone"),
+			ActorLogic: floaterActorLogic,
+			State:      make(map[string]interface{}),
+		}
+		minusone.State["Interval"] = 0
+		minusone.State["AnimCount"] = 0
+		world.spawnActor(minusone, (*world).Actors[i].X, (*world).Actors[i].Y-16)
+		soundnames := []string{"hit1", "hit2", "hit3", "hit4"}
+		soundindex := rand.Intn(len(soundnames))
+		soundname := soundnames[soundindex]
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds[soundname]))
+		sePlayer.Play()
+	} else {
+		soundnames := []string{"sword1", "sword2", "sword3", "sword4"}
+		soundindex := rand.Intn(len(soundnames))
+		soundname := soundnames[soundindex]
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds[soundname]))
+		sePlayer.Play()
+	}
+}
+
 func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
 	switch hotbarname {
 	case "Wand":
@@ -135,6 +181,10 @@ func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
 		playerAxeUse(actor, world)
 	case "Wooden Axe":
 		playerAxeUse(actor, world)
+	case "Wooden Sword":
+		playerSwordUse(actor, world)
+	case "Iron Sword":
+		playerSwordUse(actor, world)
 	}
 }
 
@@ -162,7 +212,7 @@ func playerActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			playerHotbarSwitch(actor, world, (*actor).State["hotbar"].(Hotbar).Slots[(*actor).State["hotbar"].(Hotbar).Slot].Name)
 		}
 	}
-	if (*actor).State["tooltimeout"].(int) == 5 {
+	if (*actor).State["tooltimeout"].(int) == 10 {
 		(*actor).State["tooltimeout"] = 0
 	} else if (*actor).State["tooltimeout"].(int) != 0 {
 		(*actor).State["tooltimeout"] = (*actor).State["tooltimeout"].(int) + 1

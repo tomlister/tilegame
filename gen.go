@@ -37,6 +37,24 @@ func (world *World) generateWorld() {
 				Z:          -1,
 				State:      make(map[string]interface{}),
 			}
+			enemy := Actor{
+				Tag:        "enemy",
+				Image:      (*world).Images["enemy1"],
+				ActorLogic: enemyActorLogic,
+				Z:          0,
+				Shadow:     true,
+				State:      make(map[string]interface{}),
+			}
+			enemy.State["profile"] = Enemy{
+				Name:   "Demon",
+				Health: 50,
+				Speed:  0.125,
+				Behaviour: EnemyBehaviour{
+					Melee: true,
+				},
+				ImageName: "enemy1",
+			}
+			world.spawnActorRandom(enemy, (x-1)*(32), (y-1)*(32), ((x-1)*(32))+32, ((y-1)*(32))+32, 8)
 			if height > 0.4 {
 				tile.State["world"] = true
 				tile.State["imagename"] = "stone"

@@ -5,11 +5,11 @@ import (
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/audio"
 	"github.com/hajimehoshi/ebiten/inpututil"
 )
 
 func caveEntryPointActorLogic(actor *Actor, world *World, sceneDidMove bool) {
-
 }
 
 func caveEntryPointRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {
@@ -45,6 +45,12 @@ func caveReturnButtonActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 				}
 			}
 			ebiten.SetCursorVisibility(false)
+			world.State["musicplayer"].(*audio.Player).Pause()
+			world.State["musicplayer"].(*audio.Player).Close()
+			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["gopherland"]))
+			world.State["musicplayer"] = sePlayer
+			world.State["musicplayer"].(*audio.Player).SetVolume(0.25)
+			world.State["musicplayer"].(*audio.Player).Play()
 			(*actor).Kill = true
 		}
 	} else {
@@ -106,6 +112,12 @@ func caveHoleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		(*world).CameraY = (-((*world).Actors[c].Y)) + (Height / 2) - (sy / 2)
 		(*world).Actors[i].RenderDestination = (*world).getImage("offscreen")
 		(*world).Actors[i].CustomRenderDestination = true
+		world.State["musicplayer"].(*audio.Player).Pause()
+		world.State["musicplayer"].(*audio.Player).Close()
+		sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["cave"]))
+		world.State["musicplayer"] = sePlayer
+		world.State["musicplayer"].(*audio.Player).SetVolume(0.25)
+		world.State["musicplayer"].(*audio.Player).Play()
 	}
 }
 

@@ -150,6 +150,9 @@ func main() {
 	world.Images["overworld"] = importImage("assets/overworld.png")
 	world.Images["cavemask"] = importImage("assets/cavemask.png")
 	world.Images["hole"] = importImage("assets/hole.png")
+	world.Images["enemy1"] = importImage("assets/enemy1.png")
+	world.Images["minusone"] = importImage("assets/minusone.png")
+	world.Images["minusten"] = importImage("assets/minusten.png")
 	world.Sounds = make(map[string]*[]byte)
 	world.Sounds["hover"] = importSound(world.AudioContext, "assets/hover.wav")
 	world.Sounds["select1"] = importSound(world.AudioContext, "assets/select1.wav")
@@ -157,10 +160,21 @@ func main() {
 	world.Sounds["text"] = importSound(world.AudioContext, "assets/text.wav")
 	world.Sounds["back2"] = importSound(world.AudioContext, "assets/back2.wav")
 	world.Sounds["select2"] = importSound(world.AudioContext, "assets/select2.wav")
+	world.Sounds["sword1"] = importSound(world.AudioContext, "assets/swordsounds/swish-1.wav")
+	world.Sounds["sword2"] = importSound(world.AudioContext, "assets/swordsounds/swish-2.wav")
+	world.Sounds["sword3"] = importSound(world.AudioContext, "assets/swordsounds/swish-3.wav")
+	world.Sounds["sword4"] = importSound(world.AudioContext, "assets/swordsounds/swish-4.wav")
+	world.Sounds["hit1"] = importSound(world.AudioContext, "assets/swordsounds/hit1.wav")
+	world.Sounds["hit2"] = importSound(world.AudioContext, "assets/swordsounds/hit2.wav")
+	world.Sounds["hit3"] = importSound(world.AudioContext, "assets/swordsounds/hit3.wav")
+	world.Sounds["hit4"] = importSound(world.AudioContext, "assets/swordsounds/hit4.wav")
+	world.Sounds["gopherland"] = importSound(world.AudioContext, "assets/gopherland.wav")
+	world.Sounds["cave"] = importSound(world.AudioContext, "assets/cave.wav")
 	world.Shaders = make(map[string]*ebiten.Shader)
 	world.Shaders["title"] = loadShader(shaders.TitleShader())
 	world.Shaders["lighting"] = loadShader(shaders.LightShader())
 	world.TagTable = make(map[string]int)
+	world.State["musicplayer"] = nil
 	offscreen, _ := ebiten.NewImage(Width, Height, ebiten.FilterDefault)
 	world.Images["offscreen"] = offscreen
 
@@ -173,7 +187,8 @@ func main() {
 		State:      make(map[string]interface{}),
 		Unpausable: true,
 	}
-
+	title.State["player"] = nil
+	title.State["playing"] = false
 	world.spawnActor(title, 0, 0)
 
 	go func() {

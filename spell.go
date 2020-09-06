@@ -1,5 +1,11 @@
 package main
 
+import (
+	"math/rand"
+
+	"github.com/hajimehoshi/ebiten/audio"
+)
+
 func spellArcaneActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if (*actor).State["Interval"].(int) == 5 {
 		(*actor).State["Interval"] = 0
@@ -10,6 +16,25 @@ func spellArcaneActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			(*actor).State["AnimCount"] = (*actor).State["AnimCount"].(int) + 1
 		}
 		(*actor).Image = (*actor).AltImages[(*actor).State["AnimCount"].(int)]
+		i, collided := world.detectCollisionPointTag(actor.X+63, actor.Y+54, "enemy")
+		if collided {
+			profile := (*world).Actors[i].State["profile"].(Enemy)
+			profile.Health = profile.Health - 10
+			(*world).Actors[i].State["profile"] = profile
+			minusten := Actor{
+				Image:      (*world).getImage("minusten"),
+				ActorLogic: floaterActorLogic,
+				State:      make(map[string]interface{}),
+			}
+			minusten.State["Interval"] = 0
+			minusten.State["AnimCount"] = 0
+			world.spawnActor(minusten, (*world).Actors[i].X, (*world).Actors[i].Y-16)
+			soundnames := []string{"hit1", "hit2", "hit3", "hit4"}
+			soundindex := rand.Intn(len(soundnames))
+			soundname := soundnames[soundindex]
+			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds[soundname]))
+			sePlayer.Play()
+		}
 	} else {
 		(*actor).State["Interval"] = (*actor).State["Interval"].(int) + 1
 	}
