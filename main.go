@@ -153,6 +153,7 @@ func main() {
 	world.Images["enemy1"] = importImage("assets/enemy1.png")
 	world.Images["minusone"] = importImage("assets/minusone.png")
 	world.Images["minusten"] = importImage("assets/minusten.png")
+	world.Images["manapotion"] = importImage("assets/items/manapotion.png")
 	world.Sounds = make(map[string]*[]byte)
 	world.Sounds["hover"] = importSound(world.AudioContext, "assets/hover.wav")
 	world.Sounds["select1"] = importSound(world.AudioContext, "assets/select1.wav")

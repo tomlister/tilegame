@@ -159,6 +159,21 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 			},
 			Quantity: 1,
 		},
+		{
+			Item: Item{
+				Name:      "Mana Potion",
+				ImageName: "manapotion",
+				Quantity:  1,
+			},
+			Needs: []Item{
+				{
+					Name:      "Mana Crystal",
+					ImageName: "manacrystal",
+					Quantity:  2,
+				},
+			},
+			Quantity: 1,
+		},
 	}
 
 	(*world).State["tradable"] = []Tradable{

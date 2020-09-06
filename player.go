@@ -173,6 +173,18 @@ func playerSwordUse(actor *Actor, world *World) {
 	}
 }
 
+func playerManaPotionUse(actor *Actor, world *World) {
+	hotbar := (*actor).State["hotbar"].(Hotbar)
+	hotbar.Slots[(*actor).State["hotbar"].(Hotbar).Slot] = Item{}
+	(*actor).State["hotbar"] = hotbar
+	addmana := (*actor).State["mana"].(int) + (*actor).State["manamax"].(int)/4
+	if addmana > (*actor).State["manamax"].(int) {
+		(*actor).State["mana"] = (*actor).State["manamax"].(int)
+	} else {
+		(*actor).State["mana"] = addmana
+	}
+}
+
 func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
 	switch hotbarname {
 	case "Wand":
@@ -185,6 +197,8 @@ func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
 		playerSwordUse(actor, world)
 	case "Iron Sword":
 		playerSwordUse(actor, world)
+	case "Mana Potion":
+		playerManaPotionUse(actor, world)
 	}
 }
 
