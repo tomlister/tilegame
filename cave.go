@@ -68,18 +68,10 @@ func caveReturnButtonRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, s
 }
 
 func caveHoleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
-	col, _, _ := actor.DetectPlayerCollision(world)
-	if col {
+	i := (*world).TagTable["Player"]
+	rect := Rect{actor.X, actor.Y, 32, 32}
+	if detectPointRect((*world).Actors[i].X+16, (*world).Actors[i].Y+16, rect) {
 		c := (*world).TagTable["CaveEntryPoint"]
-		i := (*world).TagTable["Player"]
-		/*caveMask := Actor{
-			Image:      (*world).getImage("cavemask"),
-			ActorLogic: backgroundActorLogic,
-			Static:     true,
-			Z:          2,
-			Tag:        "cavemask",
-		}
-		world.spawnActor(caveMask, 0, 0)*/
 		caveLighting := Actor{
 			Renderhook: true,
 			Rendercode: caveLightingRenderCode,
@@ -163,28 +155,3 @@ func caveLightingRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, scree
 	op.Images[0] = offscreen
 	screen.DrawRectShader(osw, osh, s, op)
 }
-
-/*
-lightcolors := make([]float32, 60)    // 3 floats per light
-	lightpositions := make([]float32, 40) // 2 floats per light
-	lightamount := float32(0.0)           // 20 max
-	viewportwidth, viewportheight := pipelinewrapper.WindowSettings.Width, pipelinewrapper.WindowSettings.Height
-	for _, a := range (*pipelinewrapper.World).Actors {
-		if a.Tag == "manacrystal" {
-			offsetX, offsetY := a.X+(*pipelinewrapper.World).CameraX, a.Y+(*pipelinewrapper.World).CameraY
-			imgwidth, imgheight := a.Image.Size()
-			if (offsetX+imgwidth > 0 && offsetX < viewportwidth) && (offsetY < viewportheight && offsetY+imgheight > 0) {
-				lightcolors[int(lightamount)] = float32(0xDA)
-				lightcolors[int(lightamount)+1] = float32(0x96)
-				lightcolors[int(lightamount)+2] = float32(0xF7)
-				lightpositions[int(lightamount)] = float32(offsetX)
-				lightpositions[int(lightamount)+1] = float32(offsetY)
-				lightamount++
-			}
-		}
-		if lightamount == 20 {
-			break
-		}
-	}
-
-*/
