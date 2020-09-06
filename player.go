@@ -17,19 +17,6 @@ func crossHairActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	cursorx, cursory := ebiten.CursorPosition()
 	(*actor).X = cursorx - 8
 	(*actor).Y = cursory - 8
-	/*cursorx, cursory := ebiten.CursorPosition()
-	playerImageWidth, playerImageHeight := (*world).Actors[i].Image.Size()
-	arrowImageWidth, arrowImageHeight := (*actor).Image.Size()
-	x := (*world).Actors[i].X + (playerImageWidth / 2) + (*world).CameraX
-	y := (*world).Actors[i].Y + (playerImageHeight / 2) + (*world).CameraY
-	dx := float64(cursorx) - float64(x)
-	dy := float64(cursory) - float64(y)
-	dir := math.Atan2(dy, dx) - math.Pi
-	newY := int(math.Round(float64(y-(*world).CameraY) + float64(-32)*math.Sin(dir)))
-	newX := int(math.Round(float64(x-(*world).CameraX) + float64(-32)*math.Cos(dir)))
-	(*actor).X = newX - (arrowImageWidth / 2)
-	(*actor).Y = newY - (arrowImageHeight / 2)*/
-	//(*actor).Direction = dir + math.Pi
 }
 
 func playerSplashActorLogic(actor *Actor, world *World, sceneDidMove bool) {
