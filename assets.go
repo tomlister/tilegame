@@ -96,6 +96,18 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 			Quantity:  10,
 		},
 	}
+	player.State["attributes"] = []Attribute{
+		{
+			Name:   "Run Speed+",
+			Amount: 1,
+			Cost:   20,
+		},
+		{
+			Name:   "Knockback+",
+			Amount: 1,
+			Cost:   10,
+		},
+	}
 	//find pos
 	for i := 0; i < len(world.Actors); i++ {
 		if world.Actors[i].Tag == "Player" {
@@ -315,6 +327,7 @@ func actorSetup(world *World, windowsettings WindowSettings) {
 	kb.State["Idown"] = false
 	kb.State["Cdown"] = false
 	kb.State["Jdown"] = false
+	kb.State["Pdown"] = false
 	world.spawnActor(kb, 0, 0)
 
 	sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["gopherland"]))

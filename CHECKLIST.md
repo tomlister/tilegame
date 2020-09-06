@@ -32,14 +32,14 @@
 
 **Combat Components**
 
-- [ ] Component of the game acts a free form combat system separate from the main game. 
+- [x] Component of the game acts a free form combat system separate from the main game. 
 - [x] Player Movement
 - [ ] Opponents move on the map (1 are there, 2 move randomly, 3 at player)
 - [ ] Combat System (sophistication and elegance count)
-- [ ] Opponents can die
+- [x] Opponents can die
 - [ ] Player can die
 - [x] Weapons/Items/Special Abilities
-- [ ] Characters can be created and level up
+- [ ] Characters can be created and leveled up
 - [ ] A variety of monsters and or traps are available to fight 
 
 **Components of the Game**

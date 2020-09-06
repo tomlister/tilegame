@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"math"
 	"math/rand"
 
@@ -133,19 +134,43 @@ func playerAxeUse(actor *Actor, world *World) {
 	}
 }
 
-func knockBack(px, py, ex, ey int) (float64, float64) {
+func knockBack(px, py, ex, ey, m int) (float64, float64) {
 	theta := math.Atan2(float64(py-ey), float64(px-ex))
-	knockbackDistance := 10.0
+	knockbackDistance := 5.0 * float64(m)
 	x := knockbackDistance * math.Cos(theta)
 	y := knockbackDistance * math.Sin(theta)
 	return x, y
+}
+
+func setAttribute(actor Actor, name string, amount int) (Attribute, error) {
+	attrs := actor.State["attributes"].([]Attribute)
+	for i, attr := range attrs {
+		if attr.Name == name {
+			attr.Amount = amount
+			attrs[i] = attr
+			return attr, nil
+		}
+	}
+	actor.State["attributes"] = attrs
+	return Attribute{}, errors.New("Player Attr: Unable to locate attribute")
+}
+
+func getAttribute(actor *Actor, name string) (Attribute, error) {
+	attrs := (*actor).State["attributes"].([]Attribute)
+	for _, attr := range attrs {
+		if attr.Name == name {
+			return attr, nil
+		}
+	}
+	return Attribute{}, errors.New("Player Attr: Unable to locate attribute")
 }
 
 func playerSwordUse(actor *Actor, world *World) {
 	cursorx, cursory := ebiten.CursorPosition()
 	i, collided := world.detectCollisionPointTag(cursorx-(*world).CameraX, cursory-(*world).CameraY, "enemy")
 	if collided {
-		vx, vy := knockBack(actor.X, actor.Y, (*world).Actors[i].X, (*world).Actors[i].Y)
+		attribute, _ := getAttribute(actor, "Knockback+")
+		vx, vy := knockBack(actor.X, actor.Y, (*world).Actors[i].X, (*world).Actors[i].Y, attribute.Amount)
 		(*world).Actors[i].VelocityX += vx
 		(*world).Actors[i].VelocityY += vy
 		profile := (*world).Actors[i].State["profile"].(Enemy)

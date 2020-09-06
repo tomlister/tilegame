@@ -58,7 +58,7 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) && (*world).State["pause"].(bool) == true {
 		for i := 0; i < len((*world).Actors); i++ {
 			switch (*world).Actors[i].Tag {
-			case "crafting", "inv", "trade":
+			case "crafting", "inv", "trade", "character":
 				(*world).Actors[i].Kill = true
 			}
 		}
@@ -111,6 +111,31 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		}
 	} else {
 		(*actor).State["Jdown"] = false
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyP) {
+		if !(*actor).State["Pdown"].(bool) {
+			(*actor).State["Pdown"] = true
+			if (*world).State["pause"] == false {
+				ebiten.SetCursorVisibility(true)
+				(*world).State["pause"] = true
+				character := Actor{
+					Tag:        "character",
+					Renderhook: true,
+					Rendercode: characterRenderCode,
+					ActorLogic: characterActorLogic,
+					Static:     true,
+					Z:          3,
+					State:      make(map[string]interface{}),
+					Unpausable: true,
+				}
+				character.State["scrolloffset"] = 0.0
+				character.State["hoveroffset"] = 0
+				character.State["buttondown"] = false
+				world.spawnActor(character, 0, 0)
+			}
+		}
+	} else {
+		(*actor).State["Pdown"] = false
 	}
 }
 
