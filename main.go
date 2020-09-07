@@ -17,9 +17,12 @@ var Width = 640
 var Height = 480
 
 func logic(world *World) {
-	sx, sy := world.getActorShift()
-	(*world).VelocityX += sx / 4
-	(*world).VelocityY += sy / 4
+	sx, sy := 0.0, 0.0
+	if !(*world).State["pause"].(bool) {
+		sx, sy = world.getActorShift()
+		(*world).VelocityX += sx / 4
+		(*world).VelocityY += sy / 4
+	}
 	//collision pass
 	for i := 0; i < len((*world).Actors); i++ {
 		if !(*world).Actors[i].Static {
@@ -88,7 +91,7 @@ func main() {
 	world.State = make(map[string]interface{})
 	world.State["popup"] = false
 	world.State["popuptimeout"] = 0
-	world.State["pause"] = false
+	world.State["pause"] = true
 	world.Images = make(map[string]*ebiten.Image)
 	world.Images["missingtexture"] = importImage("assets/missing.png")
 	world.Images["grass"] = importImage("assets/grass.png")

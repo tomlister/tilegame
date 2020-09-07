@@ -2,26 +2,26 @@ package main
 
 type EnemyBehaviour struct {
 	Strafe bool
-	Spin bool
-	Melee bool
+	Spin   bool
+	Melee  bool
 }
 
 type Enemy struct {
-	Name string
-	Health int
-	Behaviour EnemyBehaviour
+	Name           string
+	Health         int
+	Behaviour      EnemyBehaviour
 	AttackInterval int
-	Speed float64
-	ImageName string
+	Speed          float64
+	ImageName      string
 }
 
 func (e Enemy) enemyBehaviourProvider(actor *Actor, world *World) {
 	if e.Behaviour.Melee {
-			i := (*world).TagTable["Player"]
-			rect := Rect{actor.X, actor.Y, 32, 32}
-			if detectPointRect((*world).Actors[i].X+16, (*world).Actors[i].Y+16, rect) {
-				(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
-			}
+		i := (*world).TagTable["Player"]
+		rect := Rect{actor.X - 64, actor.Y - 64, 96, 96}
+		if detectPointRect((*world).Actors[i].X+16, (*world).Actors[i].Y+16, rect) {
+			(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
+		}
 	}
 }
 
@@ -46,17 +46,16 @@ func (e Enemy) enemyMovementProvider(actor *Actor, world *World) {
 	actor.applyFriction()
 }
 
-
 func enemyActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	profile := (*actor).State["profile"].(Enemy)
 	profile.enemyMovementProvider(actor, world)
-	if (profile.AttackInterval == 30) {
+	if profile.AttackInterval == 30 {
 		profile.AttackInterval = 0
 		profile.enemyBehaviourProvider(actor, world)
 	} else {
 		profile.AttackInterval++
 	}
-	if (profile.Health <= 0) {
+	if profile.Health <= 0 {
 		(*actor).Kill = true
 	}
 	(*actor).State["profile"] = profile

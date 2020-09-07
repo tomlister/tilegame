@@ -25,6 +25,7 @@ func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if detectPointRect(mx, my, rect) {
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 			//(*actor).State["player"].(*audio.Player).Pause()
+			(*world).State["pause"] = false
 			(*actor).Kill = true
 			actorSetup(world, windowsettings)
 			ebiten.SetCursorMode(ebiten.CursorModeHidden)

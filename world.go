@@ -184,3 +184,7 @@ func detectPointRect(x, y int, rect Rect) bool {
 		return false
 	}
 }
+
+func (world *World) killAll() {
+	(*world).Actors = make([]Actor, 0)
+}

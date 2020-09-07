@@ -259,4 +259,17 @@ func playerActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
 		(*actor).State["health"] = (*actor).State["health"].(int) - 1
 	}
+	if (*actor).State["health"].(int) <= 0 {
+		world.killAll()
+		ebiten.SetCursorVisibility(true)
+		deadScreen := Actor{
+			ActorLogic: deadActorLogic,
+			Renderhook: true,
+			Rendercode: deadRenderCode,
+			Static:     true,
+			Unpausable: true,
+		}
+		(*world).State["pause"] = true
+		world.spawnActor(deadScreen, 0, 0)
+	}
 }

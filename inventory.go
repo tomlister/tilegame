@@ -112,14 +112,12 @@ func (i *Item) inventoryGridItemLogicCode(x, y int, actor *Actor, world *World, 
 					} else if dsttype == "inventory" {
 						dstitem = (*world).Actors[i].State["inventory"].([9]Item)[slot]
 					}
-					fmt.Printf("dst: %v+\n", dstitem)
 					srcitem := Item{}
 					if (*actor).State["move"].(ItemMove).SrcType == "hotbar" {
 						srcitem = (*world).Actors[i].State["hotbar"].(Hotbar).Slots[(*actor).State["move"].(ItemMove).SrcSlot]
 					} else if (*actor).State["move"].(ItemMove).SrcType == "inventory" {
 						srcitem = (*world).Actors[i].State["inventory"].([9]Item)[(*actor).State["move"].(ItemMove).SrcSlot]
 					}
-					fmt.Printf("src: %v+\n", srcitem)
 					if dsttype == "inventory" {
 						inv := (*world).Actors[i].State["inventory"].([9]Item)
 						inv[slot] = srcitem
