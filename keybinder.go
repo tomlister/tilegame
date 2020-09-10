@@ -137,6 +137,9 @@ func keybinderActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	} else {
 		(*actor).State["Pdown"] = false
 	}
+	if ebiten.IsKeyPressed(ebiten.KeySlash) {
+		world.saveGame()
+	}
 }
 
 func keybinderRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebiten.Image) {

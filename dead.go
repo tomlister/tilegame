@@ -37,7 +37,7 @@ func deadActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			(*world).State["musicplayer"].(*audio.Player).Pause()
 			(*world).State["pause"] = false
 			(*actor).Kill = true
-			actorSetup(world, windowsettings)
+			actorSetup(world, windowsettings, nil)
 			ebiten.SetCursorMode(ebiten.CursorModeHidden)
 			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["select1"]))
 			sePlayer.Play()

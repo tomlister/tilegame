@@ -26,6 +26,7 @@ type World struct {
 	Sounds       map[string]*[]byte
 	Shaders      map[string]*ebiten.Shader
 	AudioContext *audio.Context
+	Seed         int
 }
 
 //Text Stores text data
@@ -116,7 +117,6 @@ func (world *World) getImage(name string) *ebiten.Image {
 
 func (w *World) getActorShift() (x, y float64) {
 	i := (*w).TagTable["Player"]
-	//if i != 0 {
 	vactor := (*w).Actors[i]
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
 		vactor.Y++
@@ -146,13 +146,12 @@ func (w *World) getActorShift() (x, y float64) {
 			x--
 		}
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyShift) {
-		x = x * 2
-		y = y * 2
+	speed, _ := getAttribute(&vactor, "Run Speed+")
+	if speed.Amount != 0 {
+		x *= 1 + float64(speed.Amount/4)
+		y *= 1 + float64(speed.Amount/4)
 	}
 	return x, y
-	/*}
-	return 0, 0*/
 }
 
 func (world *World) detectCollisionPointTag(x, y int, tag string) (int, bool) {

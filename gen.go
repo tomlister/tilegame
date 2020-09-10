@@ -27,7 +27,7 @@ func (world *World) generateWorld() {
 	alpha := 3.0
 	beta := 5.0
 	n := 5
-	seed := int64(69)
+	seed := int64(world.Seed)
 	p := perlin.NewPerlinRandSource(alpha, beta, n, rand.NewSource(seed))
 	for y := 1; y < 201; y++ {
 		for x := 1; x < 201; x++ {
@@ -151,7 +151,7 @@ func (world *World) generateDungeonWorld() {
 	alpha := 3.0
 	beta := 5.0
 	n := 5
-	seed := int64(69 * 4)
+	seed := int64(world.Seed * 4)
 	p := perlin.NewPerlinRandSource(alpha, beta, n, rand.NewSource(seed))
 	/*for y := 1; y < 51; y++ {
 		for x := 1; x < 51; x++ {

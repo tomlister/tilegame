@@ -83,11 +83,13 @@ func main() {
 	DEBUG := true
 
 	world := NewWorld()
+	world.Seed = 69
 	world.Debug = DEBUG
 	world.Font = append(world.Font, importFont(14))
 	world.Font = append(world.Font, importFont(20))
 	world.Font = append(world.Font, importFont(25))
 	world.Font = append(world.Font, importFont(12))
+	world.Font = append(world.Font, importFont(10))
 	world.State = make(map[string]interface{})
 	world.State["popup"] = false
 	world.State["popuptimeout"] = 0
@@ -157,6 +159,9 @@ func main() {
 	world.Images["minusone"] = importImage("assets/minusone.png")
 	world.Images["minusten"] = importImage("assets/minusten.png")
 	world.Images["manapotion"] = importImage("assets/items/manapotion.png")
+	world.Images["minustwo"] = importImage("assets/minustwo.png")
+	world.Images["player"] = importImage("assets/player.png")
+	world.Images["crosshair"] = importImage("assets/notanarrow.png")
 	world.Sounds = make(map[string]*[]byte)
 	world.Sounds["hover"] = importSound(world.AudioContext, "assets/hover.wav")
 	world.Sounds["select1"] = importSound(world.AudioContext, "assets/select1.wav")

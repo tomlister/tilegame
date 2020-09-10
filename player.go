@@ -165,7 +165,7 @@ func getAttribute(actor *Actor, name string) (Attribute, error) {
 	return Attribute{}, errors.New("Player Attr: Unable to locate attribute")
 }
 
-func playerSwordUse(actor *Actor, world *World) {
+func playerSwordUse(actor *Actor, world *World, swordtype int) {
 	cursorx, cursory := ebiten.CursorPosition()
 	i, collided := world.detectCollisionPointTag(cursorx-(*world).CameraX, cursory-(*world).CameraY, "enemy")
 	if collided {
@@ -174,16 +174,26 @@ func playerSwordUse(actor *Actor, world *World) {
 		(*world).Actors[i].VelocityX += vx
 		(*world).Actors[i].VelocityY += vy
 		profile := (*world).Actors[i].State["profile"].(Enemy)
-		profile.Health = profile.Health - 1
+		if swordtype == 0 {
+			profile.Health = profile.Health - 1
+		} else if swordtype == 1 {
+			profile.Health = profile.Health - 2
+		}
 		(*world).Actors[i].State["profile"] = profile
-		minusone := Actor{
-			Image:      (*world).getImage("minusone"),
+		var img *ebiten.Image
+		if swordtype == 0 {
+			img = (*world).getImage("minusone")
+		} else if swordtype == 1 {
+			img = (*world).getImage("minustwo")
+		}
+		minus := Actor{
+			Image:      img,
 			ActorLogic: floaterActorLogic,
 			State:      make(map[string]interface{}),
 		}
-		minusone.State["Interval"] = 0
-		minusone.State["AnimCount"] = 0
-		world.spawnActor(minusone, (*world).Actors[i].X, (*world).Actors[i].Y-16)
+		minus.State["Interval"] = 0
+		minus.State["AnimCount"] = 0
+		world.spawnActor(minus, (*world).Actors[i].X, (*world).Actors[i].Y-16)
 		soundnames := []string{"hit1", "hit2", "hit3", "hit4"}
 		soundindex := rand.Intn(len(soundnames))
 		soundname := soundnames[soundindex]
@@ -219,9 +229,9 @@ func playerHotbarSwitch(actor *Actor, world *World, hotbarname string) {
 	case "Wooden Axe":
 		playerAxeUse(actor, world)
 	case "Wooden Sword":
-		playerSwordUse(actor, world)
+		playerSwordUse(actor, world, 0)
 	case "Iron Sword":
-		playerSwordUse(actor, world)
+		playerSwordUse(actor, world, 1)
 	case "Mana Potion":
 		playerManaPotionUse(actor, world)
 	}

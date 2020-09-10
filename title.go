@@ -15,11 +15,6 @@ func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 		(*actor).State["player"] = sePlayer
 		(*actor).State["player"].(*audio.Player).Play()
 	}*/
-	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
-		(*actor).Kill = true
-		actorSetup(world, windowsettings)
-		ebiten.SetCursorMode(ebiten.CursorModeHidden)
-	}
 	mx, my := ebiten.CursorPosition()
 	rect := Rect{(Width / 2) - 75, Height - 100, 140, 50}
 	if detectPointRect(mx, my, rect) {
@@ -27,7 +22,11 @@ func titleActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 			//(*actor).State["player"].(*audio.Player).Pause()
 			(*world).State["pause"] = false
 			(*actor).Kill = true
-			actorSetup(world, windowsettings)
+			if checkForState() {
+				actorSetup(world, windowsettings, world.loadGame())
+			} else {
+				actorSetup(world, windowsettings, nil)
+			}
 			ebiten.SetCursorMode(ebiten.CursorModeHidden)
 			sePlayer, _ := audio.NewPlayerFromBytes((*world).AudioContext, (*world.Sounds["select1"]))
 			sePlayer.Play()
@@ -60,4 +59,10 @@ func titleRenderCode(actor *Actor, pipelinewrapper PipelineWrapper, screen *ebit
 	opts.GeoM.Translate(float64(rect.x), float64(rect.y))
 	screen.DrawImage(itembg, opts)
 	text.Draw(screen, "Start", (*pipelinewrapper.World.Font[3]), rect.x+32, rect.y+32, color.RGBA{R: 0x00, G: 0x00, B: 0x00, A: 0xff})
+	if checkForState() {
+		/*
+			Draw save status
+		*/
+		text.Draw(screen, "Will load from save... delete to start afresh.", (*pipelinewrapper.World.Font[4]), 20, Height-20, color.RGBA{R: 0xff, G: 0x22, B: 0x22, A: 0xff})
+	}
 }
