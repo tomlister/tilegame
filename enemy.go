@@ -1,8 +1,9 @@
 package main
 
+import "math/rand"
+
 type EnemyBehaviour struct {
-	Strafe bool
-	Spin   bool
+	Random bool
 	Melee  bool
 }
 
@@ -22,6 +23,10 @@ func (e Enemy) enemyBehaviourProvider(actor *Actor, world *World) {
 		if detectPointRect((*world).Actors[i].X+16, (*world).Actors[i].Y+16, rect) {
 			(*world).Actors[i].State["health"] = (*world).Actors[i].State["health"].(int) - 1
 		}
+	}
+	if e.Behaviour.Random {
+		(*actor).VelocityX += rand.Float64() * 4
+		(*actor).VelocityY += rand.Float64() * 4
 	}
 }
 
