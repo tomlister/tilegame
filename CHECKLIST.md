@@ -10,7 +10,7 @@
 
 **System Flow Chart**
 
-- [ ] Properly constructed System Flow Chart that illustrates how the combat system works in your RPG 
+- [x] Properly constructed System Flow Chart that illustrates how the combat system works in your RPG 
 
 **Gantt Chart**
 
@@ -34,23 +34,23 @@
 
 - [x] Component of the game acts a free form combat system separate from the main game. 
 - [x] Player Movement
-- [ ] Opponents move on the map (1 are there, 2 move randomly, 3 at player)
-- [ ] Combat System (sophistication and elegance count)
+- [x] Opponents move on the map (1 are there, 2 move randomly, 3 at player)
+- [x] Combat System (sophistication and elegance count)
 - [x] Opponents can die
-- [ ] Player can die
+- [x] Player can die
 - [x] Weapons/Items/Special Abilities
-- [ ] Characters can be created and leveled up
-- [ ] A variety of monsters and or traps are available to fight 
+- [x] Characters can be created and leveled up
+- [x] A variety of monsters and or traps are available to fight 
 
 **Components of the Game**
 
-- [ ] Reads in your map file (Files are read in error free and displayed properly)
+- [x] Reads in your map file (Files are read in error free and displayed properly)
 - [x] Character Triggers Events (Character can move around the map and trigger   events like loading new maps, starting combats, etc.) 
-- [ ] Character Generation (Your program allows characters to be created and saved)
+- [x] Character Generation (Your program allows characters to be created and saved)
 
 **Bug Free**
 
-- [ ] -­1 Mark for each major bug found (little bugs that can be fixed easily will not count). 
+- [x] -­1 Mark for each major bug found (little bugs that can be fixed easily will not count). 
 
 ### Testing the Solution
 
@@ -66,4 +66,4 @@
 
 **Personal Reflection**
 
-- [ ] Personal reflection that is an honest appraisal of what you have done well, and where you could improve. 
+- [x] Personal reflection that is an honest appraisal of what you have done well, and where you could improve. 

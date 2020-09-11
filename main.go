@@ -80,7 +80,7 @@ var windowsettings = WindowSettings{
 
 func main() {
 
-	DEBUG := true
+	DEBUG := false
 
 	world := NewWorld()
 	world.Seed = 69

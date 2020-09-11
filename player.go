@@ -266,9 +266,9 @@ func playerActorLogic(actor *Actor, world *World, sceneDidMove bool) {
 	} else if (*actor).State["tooltimeout"].(int) != 0 {
 		(*actor).State["tooltimeout"] = (*actor).State["tooltimeout"].(int) + 1
 	}
-	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
+	/*if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
 		(*actor).State["health"] = (*actor).State["health"].(int) - 1
-	}
+	}*/
 	if (*actor).State["health"].(int) <= 0 {
 		world.killAll()
 		ebiten.SetCursorVisibility(true)
