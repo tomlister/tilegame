@@ -1,1 +1,0 @@
-sips -s format icns Icon.png --out Icon.icns
